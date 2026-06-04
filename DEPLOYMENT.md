@@ -132,3 +132,31 @@ En `https://vipuray.pages.dev/dashboard`, la seccion `Datos` permite:
 - Aplicar esos datos al informe mensual.
 
 Este sera el punto de partida para generar informes ejecutivos mensuales con datos reales.
+
+## Proteccion del dashboard
+
+El dashboard y la API de lectura de analitica estan protegidos por autenticacion basica desde Cloudflare Pages Functions.
+
+Rutas protegidas:
+
+- `/dashboard`
+- `/dashboard.html`
+- `/api/analytics`
+
+Rutas publicas:
+
+- `/`
+- `/api/events`, necesaria para registrar visitas y eventos reales.
+
+Las credenciales no se guardan en el repositorio. Estan configuradas como secrets de Cloudflare Pages:
+
+```text
+DASHBOARD_USER
+DASHBOARD_PASSWORD
+```
+
+Para cambiar la clave:
+
+```bash
+npx wrangler pages secret put DASHBOARD_PASSWORD --project-name=vipuray
+```
