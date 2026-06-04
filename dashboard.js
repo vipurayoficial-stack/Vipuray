@@ -1,0 +1,836 @@
+const STORAGE_KEY = "vipurayDashboardData";
+
+const defaultData = {
+  companies: [
+    { name: "Buses Vipu Ray", logo: "Vipu Ray", logoImage: "assets/vipuray-logo-wide.png", destinations: "Pucón, Loncoche", ticketOffice: "N° 2" },
+    { name: "Buses Coñaripe", logo: "Coñaripe", logoImage: "assets/company-logos/buses-conaripe.png", destinations: "Lican Ray, Coñaripe, Panguipulli", ticketOffice: "N° 1" },
+    { name: "Buses Villarrica", logo: "Villarrica", logoImage: "assets/company-logos/buses-villarrica.png", destinations: "Temuco", ticketOffice: "N° 4" },
+    { name: "Buses Transantin", logo: "Transantin", logoImage: "assets/company-logos/buses-transantin.png", destinations: "Santiago", ticketOffice: "N° 5" },
+    { name: "Buses Pullman Tur", logo: "Pullman Tur", logoImage: "assets/company-logos/buses-pullman-tur.png", destinations: "Santiago", ticketOffice: "N° 6" },
+    { name: "Buses Oro Verde", logo: "Oro Verde", logoImage: "assets/company-logos/buses-oro-verde.png", destinations: "Santiago", ticketOffice: "N° 7" },
+    { name: "Buses Lista Azul", logo: "Lista Azul", logoImage: "assets/company-logos/buses-lista-azul.png", destinations: "Santiago", ticketOffice: "N° 8" },
+    { name: "Buses Barahona", logo: "Barahona", logoImage: "assets/company-logos/buses-barahona.png", destinations: "Pitrufquén, Temuco", ticketOffice: "Consultar" },
+    { name: "Buses Manuel Armona", logo: "Armona", logoImage: "assets/company-logos/buses-armona.png", destinations: "El Coihue, Milleuco, Chaura", ticketOffice: "Zona rural" },
+    { name: "Buses Leonardo del Valle", logo: "Del Valle", logoImage: "assets/company-logos/buses-del-valle.png", destinations: "Voipir Seco, Huincacara, Relún, Challupén", ticketOffice: "Zona rural" },
+    { name: "Transportes Esperanza (Surtran)", logo: "Surtran", logoImage: "assets/company-logos/buses-surtran.png", destinations: "Malloco Lolenco, Huilipilun Alto, Puente Long Long", ticketOffice: "Zona rural" },
+    { name: "Buses E.De.T. De Eoca Bus Limitada", logo: "E.De.T.", logoImage: "assets/company-logos/buses-edet.png", destinations: "Catrico, Rayen Lafquen", ticketOffice: "Zona rural" },
+    { name: "Buses José Castillo", logo: "José Castillo", logoImage: "", destinations: "Los Copihues, Rallenlafquen, Funalhue, Copihuelpe, Pinohuacho, Los Laureles", ticketOffice: "Zona rural" }
+  ],
+  services: [
+    { id: "VIP-PUC", destination: "Pucón", time: "Consultar en boletería", company: "Buses Vipu Ray", service: "Ventas de pasajes", price: null, availability: "Boletería N° 2" },
+    { id: "VIP-LON", destination: "Loncoche", time: "Consultar en boletería", company: "Buses Vipu Ray", service: "Ventas de pasajes", price: null, availability: "Boletería N° 2" },
+    { id: "CON-LIC", destination: "Lican Ray", time: "Consultar horarios", company: "Buses Coñaripe", service: "Información y horarios", price: null, availability: "Boletería N° 1" },
+    { id: "CON-CON", destination: "Coñaripe", time: "Consultar horarios", company: "Buses Coñaripe", service: "Información y horarios", price: null, availability: "Boletería N° 1" },
+    { id: "CON-PAN", destination: "Panguipulli", time: "Consultar horarios", company: "Buses Coñaripe", service: "Información y horarios", price: null, availability: "Boletería N° 1" },
+    { id: "VIL-TEM", destination: "Temuco", time: "Consultar en boletería", company: "Buses Villarrica", service: "Ventas de pasajes", price: null, availability: "Boletería N° 4" },
+    { id: "TRA-SAN", destination: "Santiago", time: "Consultar en boletería", company: "Buses Transantin", service: "Ventas de pasajes", price: null, availability: "Boletería N° 5" },
+    { id: "PUL-SAN", destination: "Santiago", time: "Consultar en boletería", company: "Buses Pullman Tur", service: "Ventas de pasajes", price: null, availability: "Boletería N° 6" },
+    { id: "ORO-SAN", destination: "Santiago", time: "Consultar en boletería", company: "Buses Oro Verde", service: "Ventas de pasajes", price: null, availability: "Boletería N° 7" },
+    { id: "LIS-SAN", destination: "Santiago", time: "Consultar en boletería", company: "Buses Lista Azul", service: "Ventas de pasajes", price: null, availability: "Boletería N° 8" },
+    { id: "BAR-PIT", destination: "Pitrufquén", time: "Consultar horarios", company: "Buses Barahona", service: "Consultar en terminal", price: null, availability: "Consultar en terminal" },
+    { id: "BAR-TEM", destination: "Temuco", time: "Consultar horarios", company: "Buses Barahona", service: "Consultar en terminal", price: null, availability: "Consultar en terminal" },
+    { id: "ARM-COI-1300", destination: "El Coihue", time: "Lunes a viernes 13:00 y 19:00 / sábado 13:00", company: "Buses Manuel Armona", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "ARM-MIL-1600", destination: "Milleuco", time: "Lunes a viernes 16:00", company: "Buses Manuel Armona", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "ARM-CHA", destination: "Chaura", time: "Lunes a viernes 12:00 y 17:00", company: "Buses Manuel Armona", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "LEO-VOI", destination: "Voipir Seco", time: "Lunes a viernes 13:00 / lunes a sábado 17:00", company: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "LEO-HUI", destination: "Huincacara", time: "Lunes a viernes 13:00 / lunes a sábado 17:00", company: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "LEO-REL", destination: "Relún", time: "Lunes, miércoles y viernes 13:00 y 17:00", company: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "LEO-CHA", destination: "Challupén", time: "Lunes a viernes 16:00", company: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "ESP-MAL", destination: "Malloco Lolenco", time: "Lunes a viernes 16:30", company: "Transportes Esperanza (Surtran)", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "ESP-HUI", destination: "Huilipilun Alto", time: "Consultar en terminal", company: "Transportes Esperanza (Surtran)", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "ESP-LON", destination: "Puente Long Long", time: "18:00", company: "Transportes Esperanza (Surtran)", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "EDET-CAT", destination: "Catrico", time: "Lunes a viernes 16:00", company: "Buses E.De.T. De Eoca Bus Limitada", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "EDET-RAY", destination: "Rayen Lafquen", time: "Lunes a viernes 16:00", company: "Buses E.De.T. De Eoca Bus Limitada", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "CAS-COP", destination: "Los Copihues", time: "Lunes, miércoles y viernes 13:00 / lunes a viernes 18:30", company: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "CAS-RAL", destination: "Rallenlafquen", time: "Lunes a viernes 16:30", company: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "CAS-FUN", destination: "Funalhue", time: "Lunes a viernes 18:30 / lunes a sábado 13:00", company: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "CAS-CPE", destination: "Copihuelpe", time: "Lunes a sábado 13:00 y 17:00", company: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "CAS-PIN", destination: "Pinohuacho", time: "Lunes a viernes 16:30", company: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "CAS-LAU", destination: "Los Laureles", time: "Martes y jueves 16:00", company: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" }
+  ],
+  infoSlides: [
+    {
+      label: "Recomendación",
+      title: "Llega con",
+      highlight: "anticipación",
+      text: "Para consultar recorridos o confirmar salidas, llega con tiempo suficiente y ten a mano el destino exacto que necesitas.",
+      cta: "Viaje más tranquilo",
+      image: "assets/andenes-frontis-terminal.png",
+      features: [
+        { icon: "clock", title: "Viaja tranquilo", text: "Planifica tu viaje con tiempo." },
+        { icon: "ticket", title: "Consulta fácil", text: "Horarios claros por empresa." },
+        { icon: "pin", title: "Múltiples destinos", text: "Conectamos con rutas urbanas y rurales." }
+      ]
+    },
+    {
+      label: "Horarios",
+      title: "Consulta por",
+      highlight: "empresa",
+      text: "Selecciona primero la empresa y luego el destino para ver solo las salidas que corresponden a ese operador.",
+      cta: "Consultar ahora",
+      image: "assets/fachada-trasera-terminal.png",
+      features: [
+        { icon: "bus", title: "Filtro directo", text: "Evita recorridos que no aplican." },
+        { icon: "clock", title: "Frecuencia", text: "Revisa salidas disponibles." },
+        { icon: "ticket", title: "Boletería", text: "Ubica dónde consultar." }
+      ]
+    },
+    {
+      label: "Zona rural",
+      title: "Revisa días",
+      highlight: "de salida",
+      text: "Algunos servicios rurales operan solo ciertos días de la semana. Confirma la salida antes de dirigirte al andén.",
+      cta: "Ver recorridos",
+      image: "assets/andenes-traseros-noche.png",
+      features: [
+        { icon: "pin", title: "Rutas rurales", text: "Servicios con días específicos." },
+        { icon: "clock", title: "Horarios útiles", text: "Salidas según recorrido." },
+        { icon: "bus", title: "Atención local", text: "Consulta en el terminal." }
+      ]
+    },
+    {
+      label: "Información",
+      title: "Encuentra tu",
+      highlight: "boletería",
+      text: "Cada empresa atiende sus propios destinos. Revisa el número de boletería antes de acercarte al mesón.",
+      cta: "Ver empresas",
+      image: "assets/patio-trasero-noche.png",
+      features: [
+        { icon: "ticket", title: "Boleterías", text: "Números por empresa." },
+        { icon: "pin", title: "Destinos", text: "Recorridos desde Villarrica." },
+        { icon: "clock", title: "Atención", text: "Consulta presencial." }
+      ]
+    }
+  ],
+  reports: [
+    {
+      id: "sample-report",
+      month: "2026-06",
+      websiteVisits: 0,
+      scheduleQueries: 0,
+      instagramMessages: 0,
+      emailRequests: 0,
+      instagramReach: 0,
+      instagramFollowers: 0,
+      topCompany: "Por definir",
+      topRoute: "Por definir",
+      highlights: "Completar con resultados reales al cierre del mes.",
+      opportunities: "Registrar preguntas frecuentes, rutas mas consultadas y dudas repetidas.",
+      nextActions: "Actualizar contenido, reforzar publicaciones y revisar datos del mes siguiente.",
+      vipurayQueries: 0,
+      vipurayMessages: 0,
+      vipurayTopRoute: "Por definir",
+      vipurayTopContent: "Por definir",
+      vipurayAnalysis: "Completar con aprendizajes especificos sobre Buses Vipu-Ray.",
+      vipurayRecommendations: "Definir acciones concretas para mejorar la comunicacion y claridad de informacion de Buses Vipu-Ray."
+    }
+  ]
+};
+
+let data = loadData();
+let activeCompanyIndex = 0;
+let activeSlideIndex = 0;
+let activeServiceId = "";
+let activeServiceFilter = "";
+let activeReportId = data.reports?.[0]?.id || "";
+
+const $ = (selector, root = document) => root.querySelector(selector);
+const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+
+function clone(value) {
+  return JSON.parse(JSON.stringify(value));
+}
+
+function loadData() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+    if (saved && Array.isArray(saved.companies) && Array.isArray(saved.services) && Array.isArray(saved.infoSlides)) {
+      if (!Array.isArray(saved.reports)) saved.reports = clone(defaultData.reports);
+      return saved;
+    }
+  } catch (error) {
+    console.warn("No se pudieron cargar los datos guardados.", error);
+  }
+  return clone(defaultData);
+}
+
+function saveData(message = "Cambios guardados.") {
+  data.updatedAt = new Date().toISOString();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  renderAll();
+  showToast(message);
+}
+
+function renderAll() {
+  renderMetrics();
+  renderCompanies();
+  renderCompanyForm();
+  renderServiceOptions();
+  renderServices();
+  renderServiceForm();
+  renderSlides();
+  renderSlideForm();
+  renderReportOptions();
+  renderReportForm();
+  renderReportPreview();
+  renderSavedStatus();
+}
+
+function renderMetrics() {
+  const destinations = new Set(data.services.map((service) => service.destination));
+  $("[data-metric-companies]").textContent = data.companies.length;
+  $("[data-metric-services]").textContent = data.services.length;
+  $("[data-metric-destinations]").textContent = destinations.size;
+  $("[data-metric-slides]").textContent = data.infoSlides.length;
+}
+
+function renderSavedStatus() {
+  const label = data.updatedAt
+    ? `Ultimo guardado: ${new Date(data.updatedAt).toLocaleString("es-CL")}.`
+    : "Usando datos base. Guarda cambios para aplicarlos en la pagina publica.";
+  $("[data-last-saved]").textContent = label;
+}
+
+function renderCompanies() {
+  const list = $("[data-company-list]");
+  list.innerHTML = data.companies.map((company, index) => `
+    <button class="company-row${index === activeCompanyIndex ? " is-active" : ""}" type="button" data-company-index="${index}">
+      <span class="row-pill">Boletería ${escapeHtml(company.ticketOffice)}</span>
+      <strong>${escapeHtml(company.name)}</strong>
+      <span>${escapeHtml(company.destinations)}</span>
+    </button>
+  `).join("");
+}
+
+function renderCompanyForm() {
+  const form = $("[data-company-form]");
+  const company = data.companies[activeCompanyIndex];
+  if (!company) return;
+  form.elements.index.value = activeCompanyIndex;
+  form.elements.name.value = company.name || "";
+  form.elements.logo.value = company.logo || "";
+  form.elements.logoImage.value = company.logoImage || "";
+  form.elements.destinations.value = company.destinations || "";
+  form.elements.ticketOffice.value = company.ticketOffice || "";
+  $("[data-company-form-title]").textContent = company.name || "Nueva empresa";
+}
+
+function renderServiceOptions() {
+  const filter = $("[data-service-filter]");
+  const companySelect = $("[data-service-form]").elements.company;
+  const options = data.companies.map((company) => `<option value="${company.name}">${company.name}</option>`).join("");
+  filter.innerHTML = `<option value="">Todas</option>${options}`;
+  filter.value = activeServiceFilter;
+  companySelect.innerHTML = options;
+}
+
+function renderServices() {
+  const filterValue = activeServiceFilter;
+  const services = filterValue ? data.services.filter((service) => service.company === filterValue) : data.services;
+  const list = $("[data-service-list]");
+
+  list.innerHTML = services.map((service) => `
+    <button class="service-row${service.id === activeServiceId ? " is-active" : ""}" type="button" data-service-id="${service.id}">
+      <span class="row-pill">${escapeHtml(service.company)}</span>
+      <strong>${escapeHtml(service.destination)}</strong>
+      <span>${escapeHtml(service.time)}</span>
+    </button>
+  `).join("");
+}
+
+function renderServiceForm() {
+  const form = $("[data-service-form]");
+  const service = data.services.find((item) => item.id === activeServiceId);
+
+  form.elements.editingId.value = service?.id || "";
+  form.elements.company.value = service?.company || activeServiceFilter || data.companies[0]?.name || "";
+  form.elements.destination.value = service?.destination || "";
+  form.elements.time.value = service?.time || "";
+  form.elements.service.value = service?.service || "";
+  form.elements.availability.value = service?.availability || "";
+  $("[data-service-form-title]").textContent = service ? "Editar horario" : "Agregar horario";
+}
+
+function renderSlides() {
+  const list = $("[data-slide-list]");
+  list.innerHTML = data.infoSlides.map((slide, index) => `
+    <button class="slide-row${index === activeSlideIndex ? " is-active" : ""}" type="button" data-slide-index="${index}">
+      <span class="row-pill">${escapeHtml(slide.label)}</span>
+      <strong>${escapeHtml(`${slide.title} ${slide.highlight}`)}</strong>
+      <span>${escapeHtml(slide.text)}</span>
+    </button>
+  `).join("");
+}
+
+function renderSlideForm() {
+  const form = $("[data-slide-form]");
+  const slide = data.infoSlides[activeSlideIndex];
+  if (!slide) return;
+  form.elements.index.value = activeSlideIndex;
+  form.elements.label.value = slide.label || "";
+  form.elements.title.value = slide.title || "";
+  form.elements.highlight.value = slide.highlight || "";
+  form.elements.text.value = slide.text || "";
+  form.elements.cta.value = slide.cta || "";
+  form.elements.image.value = slide.image || "";
+  $("[data-slide-form-title]").textContent = slide.label || "Nuevo aviso";
+}
+
+function getActiveReport() {
+  if (!Array.isArray(data.reports)) data.reports = [];
+  if (!activeReportId && data.reports[0]) activeReportId = data.reports[0].id;
+  return data.reports.find((report) => report.id === activeReportId) || data.reports[0] || createBlankReport();
+}
+
+function createBlankReport() {
+  const now = new Date();
+  const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+  return {
+    id: `report-${Date.now()}`,
+    month,
+    websiteVisits: 0,
+    scheduleQueries: 0,
+    instagramMessages: 0,
+    emailRequests: 0,
+    instagramReach: 0,
+    instagramFollowers: 0,
+    topCompany: "",
+    topRoute: "",
+    highlights: "",
+    opportunities: "",
+    nextActions: "",
+    vipurayQueries: 0,
+    vipurayMessages: 0,
+    vipurayTopRoute: "",
+    vipurayTopContent: "",
+    vipurayAnalysis: "",
+    vipurayRecommendations: ""
+  };
+}
+
+function renderReportOptions() {
+  const select = $("[data-report-select]");
+  if (!data.reports.length) {
+    data.reports.push(createBlankReport());
+    activeReportId = data.reports[0].id;
+  }
+
+  select.innerHTML = data.reports
+    .map((report) => `<option value="${report.id}">${formatMonth(report.month)}</option>`)
+    .join("");
+  select.value = activeReportId;
+}
+
+function renderReportForm() {
+  const form = $("[data-report-form]");
+  const report = getActiveReport();
+  form.elements.id.value = report.id;
+  form.elements.month.value = report.month || "";
+  form.elements.websiteVisits.value = report.websiteVisits || 0;
+  form.elements.scheduleQueries.value = report.scheduleQueries || 0;
+  form.elements.instagramMessages.value = report.instagramMessages || 0;
+  form.elements.emailRequests.value = report.emailRequests || 0;
+  form.elements.instagramReach.value = report.instagramReach || 0;
+  form.elements.instagramFollowers.value = report.instagramFollowers || 0;
+  form.elements.topCompany.value = report.topCompany || "";
+  form.elements.topRoute.value = report.topRoute || "";
+  form.elements.highlights.value = report.highlights || "";
+  form.elements.opportunities.value = report.opportunities || "";
+  form.elements.nextActions.value = report.nextActions || "";
+  form.elements.vipurayQueries.value = report.vipurayQueries || 0;
+  form.elements.vipurayMessages.value = report.vipurayMessages || 0;
+  form.elements.vipurayTopRoute.value = report.vipurayTopRoute || "";
+  form.elements.vipurayTopContent.value = report.vipurayTopContent || "";
+  form.elements.vipurayAnalysis.value = report.vipurayAnalysis || "";
+  form.elements.vipurayRecommendations.value = report.vipurayRecommendations || "";
+}
+
+function renderReportPreview() {
+  const report = getActiveReport();
+  $("[data-report-title]").textContent = `Informe ${formatMonth(report.month)}`;
+  const totalContacts = numberValue(report.instagramMessages) + numberValue(report.emailRequests);
+  const totalInteractions = numberValue(report.scheduleQueries) + totalContacts;
+  const engagement = numberValue(report.websiteVisits)
+    ? Math.round((numberValue(report.scheduleQueries) / numberValue(report.websiteVisits)) * 100)
+    : 0;
+  const vipurayShare = numberValue(report.scheduleQueries)
+    ? Math.round((numberValue(report.vipurayQueries) / numberValue(report.scheduleQueries)) * 100)
+    : 0;
+
+  $("[data-report-preview]").innerHTML = `
+    <div class="report-cover">
+      <div>
+        <span>Informe ejecutivo</span>
+        <strong>Terminal Vipu-Ray</strong>
+        <p>${formatMonth(report.month)} · Gestion web, consultas digitales, redes sociales y foco Buses Vipu-Ray.</p>
+      </div>
+      <dl>
+        <div>
+          <dt>Periodo</dt>
+          <dd>${formatMonth(report.month)}</dd>
+        </div>
+        <div>
+          <dt>Interacciones</dt>
+          <dd>${formatNumber(totalInteractions)}</dd>
+        </div>
+      </dl>
+    </div>
+
+    ${reportSectionTitle("01", "Panorama mensual", "Indicadores principales de presencia digital y consultas recibidas.")}
+    <div class="report-kpis report-kpis-featured">
+      ${reportKpi("Visitas web", report.websiteVisits)}
+      ${reportKpi("Consultas horarios", report.scheduleQueries)}
+      ${reportKpi("Contactos", totalContacts)}
+      ${reportKpi("Alcance Instagram", report.instagramReach)}
+      ${reportKpi("Seguidores", report.instagramFollowers)}
+      ${reportKpi("Conversion consulta", `${engagement}%`)}
+    </div>
+
+    <div class="report-snapshot">
+      <article>
+        <span>Mayor atención</span>
+        <strong>${escapeHtml(report.topCompany || "Por definir")}</strong>
+        <p>Empresa que concentra mayor interés informado durante el periodo.</p>
+      </article>
+      <article>
+        <span>Destino clave</span>
+        <strong>${escapeHtml(report.topRoute || "Por definir")}</strong>
+        <p>Ruta con mayor cantidad de consultas o necesidad de refuerzo comunicacional.</p>
+      </article>
+    </div>
+
+    ${reportSectionTitle("02", "Canales y comportamiento", "Distribucion de consultas y senales de interes de pasajeros.")}
+    <div class="report-analysis-grid">
+      <div class="report-chart-card">
+        <h3>Canales de atencion digital</h3>
+        ${barChart([
+          ["Consultas web", numberValue(report.scheduleQueries)],
+          ["Instagram", numberValue(report.instagramMessages)],
+          ["Correo", numberValue(report.emailRequests)]
+        ])}
+      </div>
+      <div class="ratio-grid">
+        ${ratioCard("Conversion a consulta", engagement, "Consultas sobre visitas web")}
+        ${ratioCard("Peso Vipu-Ray", vipurayShare, "Participacion de la marca")}
+      </div>
+    </div>
+
+    ${reportSectionTitle("03", "Lectura ejecutiva", "Sintesis para decidir que mantener, corregir y reforzar.")}
+    ${reportBlock("Logros del mes", report.highlights)}
+    ${reportBlock("Oportunidades detectadas", report.opportunities)}
+    ${reportBlock("Acciones recomendadas", report.nextActions)}
+
+    ${reportSectionTitle("04", "Foco Buses Vipu-Ray", "Analisis dedicado al operador principal y a su impacto digital.")}
+    <section class="vipuray-report-card">
+      <div class="vipuray-report-head">
+        <span>Marca prioritaria</span>
+        <strong>Buses Vipu-Ray</strong>
+        <p>Lectura dedicada a la marca principal: consultas, percepcion digital y oportunidades concretas para el operador.</p>
+      </div>
+      <div class="report-kpis vipuray-kpis">
+        ${reportKpi("Consultas Vipu-Ray", report.vipurayQueries)}
+        ${reportKpi("Mensajes Vipu-Ray", report.vipurayMessages)}
+        ${reportKpi("Peso en consultas", `${vipurayShare}%`)}
+      </div>
+      <div class="report-insights">
+        <article>
+          <span>Destino Vipu-Ray mas consultado</span>
+          <strong>${escapeHtml(report.vipurayTopRoute || "Por definir")}</strong>
+        </article>
+        <article>
+          <span>Contenido con mejor respuesta</span>
+          <strong>${escapeHtml(report.vipurayTopContent || "Por definir")}</strong>
+        </article>
+      </div>
+      ${reportBlock("Analisis especifico Vipu-Ray", report.vipurayAnalysis)}
+      ${reportBlock("Recomendaciones para Vipu-Ray", report.vipurayRecommendations)}
+    </section>
+  `;
+}
+
+function bindEvents() {
+  $("[data-company-list]").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-company-index]");
+    if (!button) return;
+    activeCompanyIndex = Number(button.dataset.companyIndex);
+    renderAll();
+  });
+
+  $("[data-company-form]").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const index = Number(form.elements.index.value);
+    const oldName = data.companies[index]?.name;
+    const company = Object.fromEntries(new FormData(form).entries());
+    data.companies[index] = company;
+    if (oldName && oldName !== company.name) {
+      data.services.forEach((service) => {
+        if (service.company === oldName) service.company = company.name;
+      });
+    }
+    saveData("Empresa guardada.");
+  });
+
+  $("[data-add-company]").addEventListener("click", () => {
+    data.companies.push({
+      name: "Nueva empresa",
+      logo: "Nueva",
+      logoImage: "",
+      destinations: "Destino",
+      ticketOffice: "Consultar"
+    });
+    activeCompanyIndex = data.companies.length - 1;
+    saveData("Empresa agregada.");
+  });
+
+  $("[data-delete-company]").addEventListener("click", () => {
+    const company = data.companies[activeCompanyIndex];
+    if (!company || !confirm(`¿Eliminar ${company.name}? Tambien se eliminaran sus servicios.`)) return;
+    data.services = data.services.filter((service) => service.company !== company.name);
+    data.companies.splice(activeCompanyIndex, 1);
+    activeCompanyIndex = Math.max(0, activeCompanyIndex - 1);
+    activeServiceId = "";
+    saveData("Empresa eliminada.");
+  });
+
+  $("[data-service-filter]").addEventListener("change", () => {
+    activeServiceFilter = $("[data-service-filter]").value;
+    activeServiceId = "";
+    renderAll();
+  });
+
+  $("[data-service-list]").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-service-id]");
+    if (!button) return;
+    activeServiceId = button.dataset.serviceId;
+    renderAll();
+  });
+
+  $("[data-service-form]").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const service = Object.fromEntries(new FormData(form).entries());
+    const editingId = service.editingId;
+    delete service.editingId;
+    service.price = null;
+    service.id = editingId || createServiceId(service);
+
+    const existingIndex = data.services.findIndex((item) => item.id === editingId);
+    if (existingIndex >= 0) {
+      data.services[existingIndex] = service;
+    } else {
+      data.services.push(service);
+    }
+    activeServiceId = service.id;
+    saveData("Servicio guardado.");
+  });
+
+  $("[data-new-service]").addEventListener("click", () => {
+    activeServiceId = "";
+    renderServiceForm();
+  });
+
+  $("[data-delete-service]").addEventListener("click", () => {
+    if (!activeServiceId) {
+      showToast("Selecciona un servicio para eliminar.");
+      return;
+    }
+    const service = data.services.find((item) => item.id === activeServiceId);
+    if (!service || !confirm(`¿Eliminar el servicio a ${service.destination}?`)) return;
+    data.services = data.services.filter((item) => item.id !== activeServiceId);
+    activeServiceId = "";
+    saveData("Servicio eliminado.");
+  });
+
+  $("[data-slide-list]").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-slide-index]");
+    if (!button) return;
+    activeSlideIndex = Number(button.dataset.slideIndex);
+    renderAll();
+  });
+
+  $("[data-slide-form]").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const index = Number(form.elements.index.value);
+    const slide = Object.fromEntries(new FormData(form).entries());
+    slide.features = data.infoSlides[index]?.features || [];
+    data.infoSlides[index] = slide;
+    saveData("Aviso guardado.");
+  });
+
+  $("[data-add-slide]").addEventListener("click", () => {
+    data.infoSlides.push({
+      label: "Aviso",
+      title: "Nuevo",
+      highlight: "mensaje",
+      text: "Describe aqui la informacion importante para pasajeros.",
+      cta: "Ver mas",
+      image: "assets/frontis-terminal.jpg",
+      features: []
+    });
+    activeSlideIndex = data.infoSlides.length - 1;
+    saveData("Aviso agregado.");
+  });
+
+  $("[data-delete-slide]").addEventListener("click", () => {
+    if (data.infoSlides.length <= 1) {
+      showToast("Debe quedar al menos un aviso.");
+      return;
+    }
+    data.infoSlides.splice(activeSlideIndex, 1);
+    activeSlideIndex = Math.max(0, activeSlideIndex - 1);
+    saveData("Aviso eliminado.");
+  });
+
+  $("[data-report-select]").addEventListener("change", () => {
+    activeReportId = $("[data-report-select]").value;
+    renderAll();
+  });
+
+  $("[data-report-form]").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const report = Object.fromEntries(new FormData(form).entries());
+    report.id = report.id || `report-${Date.now()}`;
+    [
+      "websiteVisits",
+      "scheduleQueries",
+      "instagramMessages",
+      "emailRequests",
+      "instagramReach",
+      "instagramFollowers",
+      "vipurayQueries",
+      "vipurayMessages"
+    ].forEach((field) => {
+      report[field] = numberValue(report[field]);
+    });
+
+    const index = data.reports.findIndex((item) => item.id === report.id);
+    if (index >= 0) {
+      data.reports[index] = report;
+    } else {
+      data.reports.push(report);
+    }
+    activeReportId = report.id;
+    saveData("Informe guardado.");
+  });
+
+  $("[data-new-report]").addEventListener("click", () => {
+    const report = createBlankReport();
+    data.reports.push(report);
+    activeReportId = report.id;
+    saveData("Nuevo informe creado.");
+  });
+
+  $("[data-print-report]").addEventListener("click", printReport);
+  $("[data-save-all]").addEventListener("click", () => saveData("Todo guardado."));
+  $("[data-export]").addEventListener("click", exportData);
+  $("[data-reset]").addEventListener("click", resetData);
+}
+
+function bindNavigationState() {
+  const links = $$(".dashboard-sidebar nav a");
+  const sections = links
+    .map((link) => document.querySelector(link.getAttribute("href")))
+    .filter(Boolean);
+
+  const updateActiveLink = () => {
+    let current = sections[0];
+    sections.forEach((section) => {
+      if (section.getBoundingClientRect().top < 160) current = section;
+    });
+    links.forEach((link) => {
+      link.classList.toggle("active", link.getAttribute("href") === `#${current.id}`);
+    });
+  };
+
+  window.addEventListener("scroll", updateActiveLink, { passive: true });
+  updateActiveLink();
+}
+
+function createServiceId(service) {
+  const base = `${service.company}-${service.destination}-${Date.now()}`
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/gi, "-")
+    .replace(/^-|-$/g, "")
+    .toUpperCase();
+  return base.slice(0, 42);
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "vipuray-contenido.json";
+  link.click();
+  URL.revokeObjectURL(link.href);
+  showToast("JSON exportado.");
+}
+
+function resetData() {
+  if (!confirm("¿Restaurar los datos base? Se perderan los cambios locales.")) return;
+  localStorage.removeItem(STORAGE_KEY);
+  data = clone(defaultData);
+  activeCompanyIndex = 0;
+  activeSlideIndex = 0;
+  activeServiceId = "";
+  renderAll();
+  showToast("Datos restaurados.");
+}
+
+function numberValue(value) {
+  return Number(value) || 0;
+}
+
+function formatNumber(value) {
+  if (typeof value === "string") return value;
+  return new Intl.NumberFormat("es-CL").format(numberValue(value));
+}
+
+function formatMonth(value) {
+  if (!value) return "Mes sin definir";
+  const [year, month] = value.split("-");
+  const date = new Date(Number(year), Number(month) - 1, 1);
+  return new Intl.DateTimeFormat("es-CL", { month: "long", year: "numeric" }).format(date);
+}
+
+function reportKpi(label, value) {
+  return `
+    <article>
+      <span>${label}</span>
+      <strong>${formatNumber(value)}</strong>
+    </article>
+  `;
+}
+
+function reportSectionTitle(number, title, text) {
+  return `
+    <div class="report-section-title">
+      <span>${number}</span>
+      <div>
+        <h3>${title}</h3>
+        <p>${text}</p>
+      </div>
+    </div>
+  `;
+}
+
+function ratioCard(label, value, detail) {
+  const percent = Math.max(0, Math.min(100, numberValue(value)));
+  return `
+    <article class="ratio-card">
+      <div class="ratio-ring" style="--ratio: ${percent}%">
+        <strong>${percent}%</strong>
+      </div>
+      <div>
+        <span>${label}</span>
+        <p>${detail}</p>
+      </div>
+    </article>
+  `;
+}
+
+function barChart(items) {
+  const max = Math.max(...items.map((item) => item[1]), 1);
+  return `
+    <div class="bar-chart">
+      ${items.map(([label, value]) => `
+        <div class="bar-row">
+          <span>${label}</span>
+          <div><i style="width: ${Math.max(4, (value / max) * 100)}%"></i></div>
+          <strong>${formatNumber(value)}</strong>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function reportBlock(title, text) {
+  return `
+    <article class="report-text-block">
+      <h3>${title}</h3>
+      <p>${escapeHtml(text || "Sin informacion registrada.")}</p>
+    </article>
+  `;
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function printReport() {
+  const report = getActiveReport();
+  const preview = $("[data-report-preview]").innerHTML;
+  const printWindow = window.open("", "_blank", "width=980,height=760");
+  if (!printWindow) {
+    showToast("Permite ventanas emergentes para imprimir.");
+    return;
+  }
+
+  printWindow.document.write(`
+    <!doctype html>
+    <html lang="es">
+      <head>
+        <meta charset="utf-8">
+        <title>Informe Vipu-Ray ${formatMonth(report.month)}</title>
+        <style>
+          body { color: #071b3b; font-family: Inter, Arial, sans-serif; margin: 0; padding: 36px; }
+          .report-cover { background: linear-gradient(135deg, #00294f, #0077d9); border-radius: 10px; color: white; display:grid; gap:22px; grid-template-columns: 1fr 220px; padding: 32px; }
+          .report-cover span { display:block; font-size: 13px; font-weight: 900; letter-spacing: .04em; text-transform: uppercase; }
+          .report-cover strong { display:block; font-size: 42px; margin-top: 8px; }
+          .report-cover p { color: rgba(255,255,255,.82); font-size: 18px; }
+          .report-cover dl { display:grid; gap:12px; margin:0; }
+          .report-cover dl div { border:1px solid rgba(255,255,255,.24); border-radius:10px; padding:14px; }
+          .report-cover dt { color:rgba(255,255,255,.64); font-size:11px; font-weight:900; text-transform:uppercase; }
+          .report-cover dd { color:white; font-size:18px; font-weight:900; margin:4px 0 0; }
+          .report-section-title { align-items:start; border-top: 1px solid #dbe6f2; display:grid; gap:12px; grid-template-columns:42px 1fr; margin-top:22px; padding-top:18px; }
+          .report-section-title > span { align-items:center; background:#eef7ff; border-radius:999px; color:#0077d9; display:flex; font-size:12px; font-weight:950; height:34px; justify-content:center; width:34px; }
+          .report-section-title h3 { font-size:22px; margin:0; }
+          .report-section-title p { margin-top:5px; }
+          .report-kpis, .report-insights, .report-snapshot { display: grid; gap: 14px; grid-template-columns: repeat(3, 1fr); margin-top: 18px; }
+          .report-snapshot { grid-template-columns: repeat(2, 1fr); }
+          .report-analysis-grid { display:grid; gap:14px; grid-template-columns: 1.2fr .8fr; margin-top:18px; }
+          .ratio-grid { display:grid; gap:14px; }
+          .ratio-card { align-items:center; border:1px solid #dbe6f2; border-radius:10px; display:grid; gap:12px; grid-template-columns:72px 1fr; padding:18px; }
+          .ratio-ring { align-items:center; background:#eef7ff; border-radius:999px; display:flex; height:68px; justify-content:center; width:68px; }
+          .ratio-ring strong { font-size:18px; }
+          .report-kpis article, .report-insights article, .report-chart-card, .report-text-block, .report-snapshot article { border: 1px solid #dbe6f2; border-radius: 10px; padding: 18px; }
+          span { color: #5d6b81; font-weight: 800; }
+          strong { color: #071b3b; display:block; font-size: 24px; margin-top: 6px; }
+          .report-chart-card, .report-text-block { margin-top: 18px; }
+          .vipuray-report-card { background: linear-gradient(180deg, #f4fbff, #ffffff); border: 2px solid #bde9ff; border-radius: 10px; margin-top: 22px; padding: 22px; }
+          .vipuray-report-head span { color: #0077d9; font-size: 12px; font-weight: 950; letter-spacing: .05em; text-transform: uppercase; }
+          .vipuray-report-head strong { color: #00294f; font-size: 34px; }
+          .vipuray-report-head p { margin-top: 8px; }
+          .bar-row { align-items:center; display:grid; gap:12px; grid-template-columns: 140px 1fr 80px; margin: 12px 0; }
+          .bar-row div { background:#eef4fb; border-radius:999px; height:12px; overflow:hidden; }
+          .bar-row i { background: linear-gradient(90deg, #0077d9, #18a8e0); display:block; height:100%; }
+          p { color: #33445d; line-height: 1.6; white-space: pre-line; }
+        </style>
+      </head>
+      <body>${preview}</body>
+    </html>
+  `);
+  printWindow.document.close();
+  printWindow.focus();
+  printWindow.print();
+}
+
+function showToast(message) {
+  const toast = $("[data-toast]");
+  toast.textContent = message;
+  toast.classList.add("is-visible");
+  clearTimeout(showToast.timeout);
+  showToast.timeout = setTimeout(() => toast.classList.remove("is-visible"), 2300);
+}
+
+bindEvents();
+bindNavigationState();
+renderAll();

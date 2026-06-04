@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Dashboard Vipu-Ray | Administracion</title>
+    <link rel="icon" href="assets/vipuray-logo.png" type="image/png">
+    <link rel="stylesheet" href="dashboard.css">
+  </head>
+  <body>
+    <aside class="dashboard-sidebar">
+      <a class="dashboard-brand" href="index.html">
+        <img src="assets/vipuray-logo-wide.png" alt="Buses Vipu-Ray">
+      </a>
+      <div class="sidebar-title">
+        <span>Centro de gestión</span>
+        <strong>Vipu-Ray</strong>
+      </div>
+      <nav aria-label="Administracion">
+        <a href="#resumen" class="active">Resumen</a>
+        <a href="#empresas">Empresas</a>
+        <a href="#servicios">Horarios</a>
+        <a href="#avisos">Avisos</a>
+        <a href="#informes">Informes</a>
+      </nav>
+      <div class="sidebar-note">
+        <strong>Gestión local</strong>
+        <span>Contenido, horarios, avisos e informes preparados para una futura conexión en la nube.</span>
+      </div>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="dashboard-header">
+        <div>
+          <p class="eyebrow">Panel de control</p>
+          <h1>Dashboard Vipu-Ray</h1>
+          <p>Gestión centralizada del contenido público, operadores, consultas e informes mensuales.</p>
+          <div class="header-pills" aria-label="Estado del panel">
+            <span>Contenido público</span>
+            <span>Informe ejecutivo</span>
+            <span>Foco Vipu-Ray</span>
+          </div>
+        </div>
+        <div class="header-actions">
+          <a class="ghost-button" href="index.html" target="_blank" rel="noreferrer">Ver pagina</a>
+          <button class="outline-button" type="button" data-export>Exportar JSON</button>
+          <button class="danger-button" type="button" data-reset>Restaurar</button>
+        </div>
+      </header>
+
+      <section class="dashboard-section" id="resumen">
+        <div class="metrics-grid">
+          <article class="metric-card metric-card-blue">
+            <div class="metric-top">
+              <span>Empresas</span>
+              <i>01</i>
+            </div>
+            <strong data-metric-companies>0</strong>
+            <p>Operadores registrados</p>
+          </article>
+          <article class="metric-card metric-card-cyan">
+            <div class="metric-top">
+              <span>Servicios</span>
+              <i>02</i>
+            </div>
+            <strong data-metric-services>0</strong>
+            <p>Horarios y frecuencias</p>
+          </article>
+          <article class="metric-card metric-card-green">
+            <div class="metric-top">
+              <span>Destinos</span>
+              <i>03</i>
+            </div>
+            <strong data-metric-destinations>0</strong>
+            <p>Rutas disponibles</p>
+          </article>
+          <article class="metric-card metric-card-ink">
+            <div class="metric-top">
+              <span>Avisos slider</span>
+              <i>04</i>
+            </div>
+            <strong data-metric-slides>0</strong>
+            <p>Mensajes visibles</p>
+          </article>
+        </div>
+        <div class="status-card">
+          <div>
+            <h2>Estado del contenido</h2>
+            <p data-last-saved>Sin cambios guardados en esta sesion.</p>
+          </div>
+          <button class="primary-button" type="button" data-save-all>Guardar todo</button>
+        </div>
+      </section>
+
+      <section class="dashboard-section split-section" id="empresas">
+        <div class="panel list-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Empresas</p>
+              <h2>Operadores del terminal</h2>
+            </div>
+            <button class="small-button" type="button" data-add-company>Agregar</button>
+          </div>
+          <div class="company-list" data-company-list></div>
+        </div>
+
+        <form class="panel edit-panel" data-company-form>
+          <input type="hidden" name="index">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Edicion</p>
+              <h2 data-company-form-title>Selecciona una empresa</h2>
+            </div>
+          </div>
+          <label>
+            <span>Nombre oficial</span>
+            <input name="name" required>
+          </label>
+          <label>
+            <span>Nombre corto / logo texto</span>
+            <input name="logo" required>
+          </label>
+          <label>
+            <span>Ruta del logo</span>
+            <input name="logoImage" placeholder="assets/company-logos/logo.png">
+          </label>
+          <label>
+            <span>Destinos principales</span>
+            <textarea name="destinations" rows="3" required></textarea>
+          </label>
+          <label>
+            <span>Boleteria</span>
+            <input name="ticketOffice" required>
+          </label>
+          <div class="form-actions">
+            <button class="primary-button" type="submit">Guardar empresa</button>
+            <button class="danger-button" type="button" data-delete-company>Eliminar</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="dashboard-section split-section" id="servicios">
+        <div class="panel list-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Horarios</p>
+              <h2>Servicios por empresa</h2>
+            </div>
+            <select data-service-filter aria-label="Filtrar servicios por empresa"></select>
+          </div>
+          <div class="service-list" data-service-list></div>
+        </div>
+
+        <form class="panel edit-panel" data-service-form>
+          <input type="hidden" name="editingId">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Servicio</p>
+              <h2 data-service-form-title>Agregar horario</h2>
+            </div>
+          </div>
+          <label>
+            <span>Empresa</span>
+            <select name="company" required></select>
+          </label>
+          <label>
+            <span>Destino</span>
+            <input name="destination" required>
+          </label>
+          <label>
+            <span>Horario o frecuencia</span>
+            <textarea name="time" rows="3" required></textarea>
+          </label>
+          <label>
+            <span>Tipo de servicio</span>
+            <input name="service" required>
+          </label>
+          <label>
+            <span>Boleteria / atencion</span>
+            <input name="availability" required>
+          </label>
+          <div class="form-actions">
+            <button class="primary-button" type="submit">Guardar servicio</button>
+            <button class="outline-button" type="button" data-new-service>Nuevo</button>
+            <button class="danger-button" type="button" data-delete-service>Eliminar</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="dashboard-section split-section" id="avisos">
+        <div class="panel list-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Slider</p>
+              <h2>Informacion importante</h2>
+            </div>
+            <button class="small-button" type="button" data-add-slide>Agregar</button>
+          </div>
+          <div class="slide-list" data-slide-list></div>
+        </div>
+
+        <form class="panel edit-panel" data-slide-form>
+          <input type="hidden" name="index">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Aviso</p>
+              <h2 data-slide-form-title>Selecciona un aviso</h2>
+            </div>
+          </div>
+          <label>
+            <span>Etiqueta</span>
+            <input name="label" required>
+          </label>
+          <label>
+            <span>Titulo</span>
+            <input name="title" required>
+          </label>
+          <label>
+            <span>Texto destacado</span>
+            <input name="highlight" required>
+          </label>
+          <label>
+            <span>Descripcion</span>
+            <textarea name="text" rows="4" required></textarea>
+          </label>
+          <label>
+            <span>Boton</span>
+            <input name="cta" required>
+          </label>
+          <label>
+            <span>Imagen</span>
+            <input name="image" required>
+          </label>
+          <div class="form-actions">
+            <button class="primary-button" type="submit">Guardar aviso</button>
+            <button class="danger-button" type="button" data-delete-slide>Eliminar</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="dashboard-section split-section report-section" id="informes">
+        <form class="panel edit-panel" data-report-form>
+          <input type="hidden" name="id">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Informes</p>
+              <h2>Reporte mensual</h2>
+            </div>
+          </div>
+          <div class="form-cluster">
+            <div class="cluster-heading">
+              <span>01</span>
+              <strong>Resumen del mes</strong>
+            </div>
+            <label>
+              <span>Mes del informe</span>
+              <input type="month" name="month" required>
+            </label>
+            <div class="form-grid two">
+              <label>
+                <span>Visitas web</span>
+                <input type="number" name="websiteVisits" min="0" value="0">
+              </label>
+              <label>
+                <span>Consultas de horarios</span>
+                <input type="number" name="scheduleQueries" min="0" value="0">
+              </label>
+              <label>
+                <span>Mensajes por Instagram</span>
+                <input type="number" name="instagramMessages" min="0" value="0">
+              </label>
+              <label>
+                <span>Solicitudes por correo</span>
+                <input type="number" name="emailRequests" min="0" value="0">
+              </label>
+              <label>
+                <span>Alcance Instagram</span>
+                <input type="number" name="instagramReach" min="0" value="0">
+              </label>
+              <label>
+                <span>Seguidores Instagram</span>
+                <input type="number" name="instagramFollowers" min="0" value="0">
+              </label>
+            </div>
+          </div>
+
+          <div class="form-cluster">
+            <div class="cluster-heading">
+              <span>02</span>
+              <strong>Lectura ejecutiva</strong>
+            </div>
+            <div class="form-grid two">
+              <label>
+                <span>Empresa mas consultada</span>
+                <input name="topCompany" placeholder="Ej: Buses Vipu Ray">
+              </label>
+              <label>
+                <span>Destino mas consultado</span>
+                <input name="topRoute" placeholder="Ej: Villarrica - Pucon">
+              </label>
+            </div>
+            <label>
+              <span>Logros del mes</span>
+              <textarea name="highlights" rows="3" placeholder="Ej: aumento de consultas, mejor respuesta en redes, nueva informacion publicada."></textarea>
+            </label>
+            <label>
+              <span>Oportunidades detectadas</span>
+              <textarea name="opportunities" rows="3" placeholder="Ej: rutas con mas preguntas, horarios que conviene aclarar, contenido que genero interes."></textarea>
+            </label>
+            <label>
+              <span>Acciones recomendadas para el proximo mes</span>
+              <textarea name="nextActions" rows="3" placeholder="Ej: publicar carrusel de horarios, mejorar respuesta a consultas frecuentes, actualizar avisos."></textarea>
+            </label>
+          </div>
+
+          <div class="form-cluster vipuray-cluster">
+            <div class="cluster-heading">
+              <span>03</span>
+              <strong>Foco especial Buses Vipu-Ray</strong>
+            </div>
+            <div class="form-grid two">
+              <label>
+                <span>Consultas Vipu-Ray</span>
+                <input type="number" name="vipurayQueries" min="0" value="0">
+              </label>
+              <label>
+                <span>Mensajes sobre Vipu-Ray</span>
+                <input type="number" name="vipurayMessages" min="0" value="0">
+              </label>
+              <label>
+                <span>Destino Vipu-Ray mas consultado</span>
+                <input name="vipurayTopRoute" placeholder="Ej: Villarrica - Pucon">
+              </label>
+              <label>
+                <span>Contenido Vipu-Ray con mejor respuesta</span>
+                <input name="vipurayTopContent" placeholder="Ej: post de horarios, reel del terminal">
+              </label>
+            </div>
+            <label>
+              <span>Analisis especifico para Buses Vipu-Ray</span>
+              <textarea name="vipurayAnalysis" rows="4" placeholder="Explica que funciono, que preguntaron los pasajeros y que valor genero la gestion digital para Vipu-Ray."></textarea>
+            </label>
+            <label>
+              <span>Recomendaciones para Buses Vipu-Ray</span>
+              <textarea name="vipurayRecommendations" rows="4" placeholder="Acciones concretas para mejorar percepcion, consultas, claridad de horarios o contenido de la marca."></textarea>
+            </label>
+          </div>
+          <div class="form-actions">
+            <button class="primary-button" type="submit">Guardar informe</button>
+            <button class="outline-button" type="button" data-new-report>Nuevo informe</button>
+            <button class="outline-button" type="button" data-print-report>Imprimir / PDF</button>
+          </div>
+        </form>
+
+        <div class="panel report-preview-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Vista ejecutiva</p>
+              <h2 data-report-title>Informe mensual</h2>
+            </div>
+            <select data-report-select aria-label="Seleccionar informe guardado"></select>
+          </div>
+          <div class="report-preview" data-report-preview></div>
+        </div>
+      </section>
+    </main>
+
+    <p class="toast" data-toast role="status" aria-live="polite"></p>
+    <script src="dashboard.js"></script>
+  </body>
+</html>
