@@ -111,6 +111,16 @@ D1 database: vipuray_analytics
 
 8. Guardar y volver a desplegar el proyecto.
 
+La base creada para este proyecto es:
+
+```text
+Nombre: vipuray_analytics
+ID: 7096f8e6-bccf-420b-aa20-a47d87f4b622
+Binding usado por la web: DB
+```
+
+El archivo `wrangler.toml` ya contiene este binding para que Cloudflare Pages lo tome en los despliegues del repositorio.
+
 ### Uso en el dashboard
 
 En `https://vipuray.pages.dev/dashboard`, la seccion `Datos` permite:
