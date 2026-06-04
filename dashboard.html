@@ -19,6 +19,7 @@
       </div>
       <nav aria-label="Administracion">
         <a href="#resumen" class="active">Resumen</a>
+        <a href="#datos">Datos</a>
         <a href="#empresas">Empresas</a>
         <a href="#servicios">Horarios</a>
         <a href="#avisos">Avisos</a>
@@ -90,6 +91,85 @@
             <p data-last-saved>Sin cambios guardados en esta sesion.</p>
           </div>
           <button class="primary-button" type="button" data-save-all>Guardar todo</button>
+        </div>
+      </section>
+
+      <section class="dashboard-section analytics-section" id="datos">
+        <div class="panel analytics-control-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Datos reales</p>
+              <h2>Lectura por rango de fechas</h2>
+            </div>
+            <span class="sync-badge" data-analytics-source>Esperando datos</span>
+          </div>
+          <div class="analytics-toolbar">
+            <label>
+              <span>Desde</span>
+              <input type="date" data-analytics-from>
+            </label>
+            <label>
+              <span>Hasta</span>
+              <input type="date" data-analytics-to>
+            </label>
+            <button class="primary-button" type="button" data-refresh-analytics>Actualizar datos</button>
+            <button class="outline-button" type="button" data-apply-analytics>Aplicar al informe</button>
+          </div>
+          <p class="analytics-status" data-analytics-status>Selecciona un rango y actualiza para cargar datos.</p>
+        </div>
+
+        <div class="analytics-grid">
+          <article class="analytics-card">
+            <span>Visitas</span>
+            <strong data-analytics-visits>0</strong>
+            <small>Páginas vistas registradas</small>
+          </article>
+          <article class="analytics-card">
+            <span>Consultas</span>
+            <strong data-analytics-queries>0</strong>
+            <small>Consultas de horarios</small>
+          </article>
+          <article class="analytics-card">
+            <span>Instagram</span>
+            <strong data-analytics-instagram>0</strong>
+            <small>Clics hacia la cuenta</small>
+          </article>
+          <article class="analytics-card vipuray">
+            <span>Foco Vipu-Ray</span>
+            <strong data-analytics-vipuray>0</strong>
+            <small>Interacciones asociadas</small>
+          </article>
+        </div>
+
+        <div class="split-section analytics-detail-grid">
+          <div class="panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Ranking</p>
+                <h2>Empresas consultadas</h2>
+              </div>
+            </div>
+            <div class="analytics-list" data-analytics-companies></div>
+          </div>
+          <div class="panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Ranking</p>
+                <h2>Destinos consultados</h2>
+              </div>
+            </div>
+            <div class="analytics-list" data-analytics-destinations></div>
+          </div>
+        </div>
+
+        <div class="panel analytics-chart-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Actividad</p>
+              <h2>Movimiento diario</h2>
+            </div>
+          </div>
+          <div class="analytics-chart" data-analytics-timeline></div>
         </div>
       </section>
 

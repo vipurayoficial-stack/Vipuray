@@ -172,6 +172,8 @@ const infoSlides = [
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
 const DASHBOARD_STORAGE_KEY = "vipurayDashboardData";
+const ANALYTICS_STORAGE_KEY = "vipurayAnalyticsEvents";
+const ANALYTICS_SESSION_KEY = "vipurayAnalyticsSession";
 
 const formatMoney = (value) =>
   new Intl.NumberFormat("es-CL", { style: "currency", currency: "CLP", maximumFractionDigits: 0 }).format(value);
@@ -186,6 +188,10 @@ function init() {
   startInfoSlider();
   setActiveNavOnScroll();
   setupPageMotion();
+  trackAnalyticsEvent("page_view", {
+    source: "site",
+    label: document.title
+  });
 }
 
 function applyDashboardData() {
@@ -410,7 +416,14 @@ function bindEvents() {
   $("[data-search-form]").addEventListener("submit", (event) => {
     event.preventDefault();
     const form = event.currentTarget;
-    renderResults(form.elements.company.value);
+    const companyName = form.elements.company.value;
+    const selectedCompany = companies.find((company) => company.name === companyName);
+    renderResults(companyName);
+    trackAnalyticsEvent("schedule_query", {
+      source: "search_form",
+      company: companyName,
+      destination: selectedCompany?.destinations || ""
+    });
     scrollToSection("#resultados");
     showToast("Información actualizada.");
   });
@@ -432,9 +445,43 @@ function bindEvents() {
     const companyButton = event.target.closest("[data-card-company]");
     if (companyButton) {
       const form = $("[data-search-form]");
+      const companyName = companyButton.dataset.cardCompany;
+      const selectedCompany = companies.find((company) => company.name === companyName);
+      trackAnalyticsEvent("company_card_click", {
+        source: "company_card",
+        company: companyName,
+        destination: selectedCompany?.destinations || ""
+      });
       form.elements.company.value = companyButton.dataset.cardCompany;
       form.requestSubmit();
       return;
+    }
+
+    const instagramLink = event.target.closest("a[href*='instagram.com']");
+    if (instagramLink) {
+      trackAnalyticsEvent("instagram_click", {
+        source: "external_link",
+        label: instagramLink.textContent.trim() || "Instagram"
+      });
+      return;
+    }
+
+    const emailLink = event.target.closest("a[href^='mailto:']");
+    if (emailLink) {
+      trackAnalyticsEvent("email_click", {
+        source: "email_link",
+        label: emailLink.textContent.trim() || "Correo"
+      });
+      return;
+    }
+
+    const infoCta = event.target.closest(".info-slide-cta");
+    if (infoCta) {
+      const slide = infoSlides[state.activeInfoSlide];
+      trackAnalyticsEvent("info_cta_click", {
+        source: "info_slider",
+        label: slide?.label || "Aviso"
+      });
     }
 
     const sliderDot = event.target.closest("[data-slider-dot]");
@@ -538,9 +585,62 @@ function handleContactSubmit(event) {
   const messages = JSON.parse(localStorage.getItem("vipurayMessages") || "[]");
   messages.push({ ...data, createdAt: new Date().toISOString() });
   localStorage.setItem("vipurayMessages", JSON.stringify(messages));
+  trackAnalyticsEvent("contact_form", {
+    source: "contact_form",
+    label: "Solicitud enviada"
+  });
   $("[data-contact-status]").textContent = "Solicitud enviada. Te contactaremos a la brevedad.";
   form.reset();
   showToast("Mensaje recibido.");
+}
+
+function trackAnalyticsEvent(type, payload = {}) {
+  const event = {
+    type,
+    path: window.location.pathname,
+    referrer: document.referrer,
+    sessionId: getAnalyticsSessionId(),
+    createdAt: new Date().toISOString(),
+    ...payload
+  };
+
+  storeLocalAnalyticsEvent(event);
+
+  try {
+    fetch("/api/events", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(event),
+      keepalive: true
+    }).catch(() => {});
+  } catch (_error) {
+    // La copia local permite revisar eventos aun si la API todavia no esta conectada.
+  }
+}
+
+function getAnalyticsSessionId() {
+  const fallbackSessionId = `session-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+
+  try {
+    let sessionId = localStorage.getItem(ANALYTICS_SESSION_KEY);
+    if (!sessionId) {
+      sessionId = fallbackSessionId;
+      localStorage.setItem(ANALYTICS_SESSION_KEY, sessionId);
+    }
+    return sessionId;
+  } catch (_error) {
+    return fallbackSessionId;
+  }
+}
+
+function storeLocalAnalyticsEvent(event) {
+  try {
+    const events = JSON.parse(localStorage.getItem(ANALYTICS_STORAGE_KEY) || "[]");
+    events.push(event);
+    localStorage.setItem(ANALYTICS_STORAGE_KEY, JSON.stringify(events.slice(-1000)));
+  } catch (_error) {
+    // Si el navegador bloquea almacenamiento local, la API remota sigue intentando registrar el evento.
+  }
 }
 
 function setActiveNavOnScroll() {

@@ -1,4 +1,5 @@
 const STORAGE_KEY = "vipurayDashboardData";
+const ANALYTICS_STORAGE_KEY = "vipurayAnalyticsEvents";
 
 const defaultData = {
   companies: [
@@ -133,6 +134,13 @@ let activeSlideIndex = 0;
 let activeServiceId = "";
 let activeServiceFilter = "";
 let activeReportId = data.reports?.[0]?.id || "";
+let analyticsState = {
+  loading: false,
+  source: "local",
+  range: getDefaultDateRange(),
+  data: emptyAnalyticsData(),
+  error: ""
+};
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
@@ -163,6 +171,7 @@ function saveData(message = "Cambios guardados.") {
 
 function renderAll() {
   renderMetrics();
+  renderAnalytics();
   renderCompanies();
   renderCompanyForm();
   renderServiceOptions();
@@ -189,6 +198,245 @@ function renderSavedStatus() {
     ? `Ultimo guardado: ${new Date(data.updatedAt).toLocaleString("es-CL")}.`
     : "Usando datos base. Guarda cambios para aplicarlos en la pagina publica.";
   $("[data-last-saved]").textContent = label;
+}
+
+function renderAnalytics() {
+  const analytics = analyticsState.data || emptyAnalyticsData();
+  const totals = analytics.totals || emptyAnalyticsData().totals;
+
+  $("[data-analytics-from]").value = analyticsState.range.from;
+  $("[data-analytics-to]").value = analyticsState.range.to;
+  $("[data-analytics-source]").textContent = analyticsState.source === "remote" ? "D1 conectado" : "Datos locales";
+  $("[data-analytics-source]").classList.toggle("is-remote", analyticsState.source === "remote");
+  $("[data-analytics-visits]").textContent = formatNumber(totals.page_view);
+  $("[data-analytics-queries]").textContent = formatNumber(totals.schedule_query);
+  $("[data-analytics-instagram]").textContent = formatNumber(totals.instagram_click);
+  $("[data-analytics-vipuray]").textContent = formatNumber(totals.vipurayInteractions);
+  $("[data-analytics-status]").textContent = analyticsState.error
+    ? analyticsState.error
+    : `Rango activo: ${formatDate(analyticsState.range.from)} al ${formatDate(analyticsState.range.to)}.`;
+
+  renderAnalyticsList("[data-analytics-companies]", analytics.companies, "Sin consultas de empresas en este rango.");
+  renderAnalyticsList("[data-analytics-destinations]", analytics.destinations, "Sin destinos consultados en este rango.");
+  renderAnalyticsTimeline(analytics.timeline || []);
+}
+
+function renderAnalyticsList(selector, rows = [], emptyText) {
+  const list = $(selector);
+  if (!rows.length) {
+    list.innerHTML = `<p class="empty-state">${emptyText}</p>`;
+    return;
+  }
+
+  const max = Math.max(...rows.map((row) => row.total), 1);
+  list.innerHTML = rows
+    .slice(0, 6)
+    .map((row, index) => `
+      <article>
+        <div>
+          <span>${String(index + 1).padStart(2, "0")}</span>
+          <strong>${escapeHtml(row.name)}</strong>
+        </div>
+        <em>${formatNumber(row.total)}</em>
+        <i style="--bar-width: ${(row.total / max) * 100}%"></i>
+      </article>
+    `)
+    .join("");
+}
+
+function renderAnalyticsTimeline(rows = []) {
+  const chart = $("[data-analytics-timeline]");
+  if (!rows.length) {
+    chart.innerHTML = `<p class="empty-state">Aun no hay movimiento diario para este rango.</p>`;
+    return;
+  }
+
+  const max = Math.max(...rows.map((row) => row.total), 1);
+  chart.innerHTML = rows
+    .slice(-18)
+    .map((row) => `
+      <div title="${formatDate(row.day)}: ${formatNumber(row.total)} eventos">
+        <span style="height: ${Math.max(8, (row.total / max) * 100)}%"></span>
+        <small>${row.day.slice(8, 10)}</small>
+      </div>
+    `)
+    .join("");
+}
+
+async function refreshAnalytics() {
+  analyticsState.loading = true;
+  analyticsState.error = "Cargando datos...";
+  renderAnalytics();
+
+  const from = $("[data-analytics-from]").value;
+  const to = $("[data-analytics-to]").value;
+  analyticsState.range = normalizeDateRange(from, to);
+
+  try {
+    const response = await fetch(`/api/analytics?from=${analyticsState.range.from}&to=${analyticsState.range.to}`, {
+      headers: { accept: "application/json" }
+    });
+    const payload = await response.json();
+
+    if (payload.configured && payload.ok) {
+      analyticsState.data = payload;
+      analyticsState.source = "remote";
+      analyticsState.error = "Datos cargados desde Cloudflare D1.";
+    } else {
+      analyticsState.data = summarizeLocalAnalytics(analyticsState.range);
+      analyticsState.source = "local";
+      analyticsState.error = "D1 aun no esta conectado. Mostrando datos locales de este navegador.";
+    }
+  } catch (_error) {
+    analyticsState.data = summarizeLocalAnalytics(analyticsState.range);
+    analyticsState.source = "local";
+    analyticsState.error = "No se pudo leer la API remota. Mostrando datos locales de este navegador.";
+  }
+
+  analyticsState.loading = false;
+  renderAnalytics();
+}
+
+function summarizeLocalAnalytics(range) {
+  let events = [];
+  try {
+    events = JSON.parse(localStorage.getItem(ANALYTICS_STORAGE_KEY) || "[]");
+  } catch (_error) {
+    events = [];
+  }
+
+  const fromTime = new Date(`${range.from}T00:00:00`).getTime();
+  const toTime = new Date(`${range.to}T23:59:59`).getTime();
+  const filtered = events.filter((event) => {
+    const time = new Date(event.createdAt || event.created_at || "").getTime();
+    return Number.isFinite(time) && time >= fromTime && time <= toTime;
+  });
+
+  const totals = emptyAnalyticsData().totals;
+  const companyCounts = new Map();
+  const destinationCounts = new Map();
+  const dayCounts = new Map();
+  const sessions = new Set();
+
+  filtered.forEach((event) => {
+    totals[event.type] = (totals[event.type] || 0) + 1;
+    if (event.sessionId) sessions.add(event.sessionId);
+    if (event.company) companyCounts.set(event.company, (companyCounts.get(event.company) || 0) + 1);
+    if (event.destination) {
+      event.destination
+        .split(",")
+        .map((destination) => destination.trim())
+        .filter(Boolean)
+        .forEach((destination) => destinationCounts.set(destination, (destinationCounts.get(destination) || 0) + 1));
+    }
+    const day = (event.createdAt || "").slice(0, 10);
+    if (day) dayCounts.set(day, (dayCounts.get(day) || 0) + 1);
+    if (isVipurayEvent(event)) totals.vipurayInteractions += 1;
+  });
+
+  totals.uniqueVisitors = sessions.size;
+
+  const companies = mapToRows(companyCounts);
+  const destinations = mapToRows(destinationCounts);
+
+  return {
+    ok: true,
+    configured: false,
+    range,
+    totals,
+    topCompany: companies[0]?.name || "",
+    topRoute: destinations[0]?.name || "",
+    companies,
+    destinations,
+    timeline: mapToRows(dayCounts).map((row) => ({ day: row.name, total: row.total }))
+  };
+}
+
+function applyAnalyticsToReport() {
+  const analytics = analyticsState.data || emptyAnalyticsData();
+  const totals = analytics.totals || emptyAnalyticsData().totals;
+  const report = getActiveReport();
+
+  report.month = analyticsState.range.from.slice(0, 7);
+  report.websiteVisits = totals.page_view || 0;
+  report.scheduleQueries = totals.schedule_query || 0;
+  report.instagramMessages = totals.instagram_click || 0;
+  report.emailRequests = (totals.email_click || 0) + (totals.contact_form || 0);
+  report.topCompany = analytics.topCompany || analytics.companies?.[0]?.name || "Por definir";
+  report.topRoute = analytics.topRoute || analytics.destinations?.[0]?.name || "Por definir";
+  report.vipurayQueries = analytics.companies?.find((row) => row.name === "Buses Vipu Ray")?.total || 0;
+  report.vipurayMessages = totals.vipurayInteractions || 0;
+  report.vipurayTopRoute = getVipurayTopRoute(analytics.destinations) || "Por definir";
+  report.highlights = report.highlights || "Se registraron interacciones digitales reales para revisar comportamiento de pasajeros.";
+  report.opportunities = report.opportunities || "Analizar empresas y destinos con mayor consulta para reforzar informacion publica.";
+  report.nextActions = report.nextActions || "Actualizar horarios visibles, responder dudas frecuentes y reforzar contenido en Instagram.";
+  report.vipurayAnalysis = report.vipurayAnalysis || "Buses Vipu-Ray cuenta con lectura separada para medir consultas e interes sobre Pucón y Loncoche.";
+  report.vipurayRecommendations = report.vipurayRecommendations || "Publicar contenido mensual claro sobre salidas, boleteria y recomendaciones de viaje para pasajeros de Vipu-Ray.";
+
+  const index = data.reports.findIndex((item) => item.id === report.id);
+  if (index >= 0) data.reports[index] = report;
+  activeReportId = report.id;
+  saveData("Datos aplicados al informe.");
+}
+
+function getDefaultDateRange() {
+  const now = new Date();
+  const from = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+  const to = now.toISOString().slice(0, 10);
+  return { from, to };
+}
+
+function normalizeDateRange(from, to) {
+  const fallback = getDefaultDateRange();
+  const normalizedFrom = /^\d{4}-\d{2}-\d{2}$/.test(from || "") ? from : fallback.from;
+  const normalizedTo = /^\d{4}-\d{2}-\d{2}$/.test(to || "") ? to : fallback.to;
+  return normalizedFrom <= normalizedTo
+    ? { from: normalizedFrom, to: normalizedTo }
+    : { from: normalizedTo, to: normalizedFrom };
+}
+
+function emptyAnalyticsData() {
+  return {
+    ok: false,
+    configured: false,
+    range: getDefaultDateRange(),
+    totals: {
+      page_view: 0,
+      schedule_query: 0,
+      company_card_click: 0,
+      contact_form: 0,
+      instagram_click: 0,
+      email_click: 0,
+      info_cta_click: 0,
+      uniqueVisitors: 0,
+      vipurayInteractions: 0
+    },
+    topCompany: "",
+    topRoute: "",
+    companies: [],
+    destinations: [],
+    timeline: []
+  };
+}
+
+function mapToRows(map) {
+  return Array.from(map.entries())
+    .map(([name, total]) => ({ name, total }))
+    .sort((a, b) => b.total - a.total || a.name.localeCompare(b.name));
+}
+
+function isVipurayEvent(event) {
+  const combined = `${event.company || ""} ${event.destination || ""}`.toLowerCase();
+  return combined.includes("vipu") || combined.includes("pucón") || combined.includes("pucon") || combined.includes("loncoche");
+}
+
+function getVipurayTopRoute(destinations = []) {
+  return destinations.find((row) => /puc[oó]n|loncoche/i.test(row.name))?.name || "";
+}
+
+function formatDate(value) {
+  if (!value) return "sin fecha";
+  return new Intl.DateTimeFormat("es-CL", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(`${value}T12:00:00`));
 }
 
 function renderCompanies() {
@@ -588,6 +836,9 @@ function bindEvents() {
     renderAll();
   });
 
+  $("[data-refresh-analytics]").addEventListener("click", refreshAnalytics);
+  $("[data-apply-analytics]").addEventListener("click", applyAnalyticsToReport);
+
   $("[data-report-form]").addEventListener("submit", (event) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -834,3 +1085,4 @@ function showToast(message) {
 bindEvents();
 bindNavigationState();
 renderAll();
+refreshAnalytics();

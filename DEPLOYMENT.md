@@ -70,8 +70,55 @@ https://vipuray.cl/
 
 ## Datos e informes
 
-La web ya tiene un dashboard local. Para datos reales automaticos, el siguiente paso recomendado es publicar la web y luego agregar:
+La web ya tiene un dashboard local y una capa preparada para datos reales automaticos.
 
-- Cloudflare Web Analytics para trafico general.
-- Pages Functions + D1 para registrar consultas de horarios, clics de Instagram, mensajes y eventos personalizados por rango de fechas.
-- Generacion de informes mensuales desde el dashboard usando datos reales.
+Actualmente registra:
+
+- Visitas a la pagina.
+- Consultas de horarios por empresa.
+- Clics en tarjetas de empresas.
+- Clics a Instagram.
+- Clics de correo.
+- Formularios enviados.
+- Interacciones enfocadas en Buses Vipu-Ray.
+
+Si Cloudflare D1 todavia no esta conectado, el dashboard muestra datos locales de este navegador. Cuando D1 quede conectado, el dashboard empezara a leer datos centralizados de todos los visitantes.
+
+### Activar Cloudflare D1
+
+1. Entrar a Cloudflare.
+2. Ir a Storage & Databases > D1 SQL Database.
+3. Crear una base llamada, por ejemplo:
+
+```text
+vipuray_analytics
+```
+
+4. Abrir la base creada y ejecutar el SQL de:
+
+```text
+migrations/0001_create_analytics_events.sql
+```
+
+5. Ir al proyecto de Pages de Vipu-Ray.
+6. Entrar a Settings > Functions > D1 database bindings.
+7. Crear un binding con:
+
+```text
+Variable name: DB
+D1 database: vipuray_analytics
+```
+
+8. Guardar y volver a desplegar el proyecto.
+
+### Uso en el dashboard
+
+En `https://vipuray.pages.dev/dashboard`, la seccion `Datos` permite:
+
+- Elegir fecha inicial y fecha final.
+- Ver visitas, consultas, clics de Instagram e interacciones Vipu-Ray.
+- Revisar rankings de empresas y destinos.
+- Ver actividad diaria en grafico.
+- Aplicar esos datos al informe mensual.
+
+Este sera el punto de partida para generar informes ejecutivos mensuales con datos reales.
