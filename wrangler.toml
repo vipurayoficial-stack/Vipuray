@@ -10,3 +10,9 @@ database_id = "7096f8e6-bccf-420b-aa20-a47d87f4b622"
 migrations_dir = "migrations"
 
 [env.production]
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "vipuray_analytics"
+database_id = "7096f8e6-bccf-420b-aa20-a47d87f4b622"
+migrations_dir = "migrations"
