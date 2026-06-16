@@ -298,7 +298,7 @@ function renderResults(companyName) {
 
   const groupedServices = groupServicesByDestination(matchedServices);
   const serviceTypes = [...new Set(matchedServices.map((service) => service.service))].join(", ");
-  const availabilityText = [...new Set(matchedServices.map((service) => service.availability))].join(", ");
+  const destinationCount = groupedServices.length;
 
   results.innerHTML = `
     <article class="result-card route-summary-card company-result-card">
@@ -310,28 +310,34 @@ function renderResults(companyName) {
             <p>Información disponible desde el Terminal de Buses Vipu-Ray.</p>
           </div>
         </div>
-        <span class="company-pill">Boletería ${company.ticketOffice}</span>
+        <div class="company-result-actions">
+          <span class="company-pill">${ticketIcon()}Boletería ${company.ticketOffice}</span>
+          <a class="table-action" href="${companyEmailUrl(company.name)}">Consultar por correo</a>
+        </div>
       </div>
       <div class="company-info-grid">
-        <div>
-          <small>Destinos principales</small>
+        <div class="company-info-item primary">
+          <small>Destinos disponibles</small>
           <strong>${company.destinations}</strong>
         </div>
-        <div>
-          <small>Tipo de servicio</small>
+        <div class="company-info-item">
+          <small>Servicio disponible</small>
           <strong>${serviceTypes}</strong>
         </div>
+      </div>
+      <div class="service-list-header">
         <div>
-          <small>Atención / boletería</small>
-          <strong>${availabilityText}</strong>
+          <small>Consulta de salidas</small>
+          <strong>${destinationCount} ${destinationCount === 1 ? "destino encontrado" : "destinos encontrados"}</strong>
         </div>
+        <span>Horarios y frecuencias referenciales. Confirma siempre con la empresa.</span>
       </div>
       <div class="service-list">
         ${groupedServices.map(renderCompanyService).join("")}
       </div>
       <div class="price-row">
         <strong>Valores: consultar en boletería</strong>
-        <a class="table-action" href="${companyEmailUrl(company.name)}">Consultar por correo</a>
+        <span>La venta o confirmación se realiza directamente con cada empresa.</span>
       </div>
     </article>
   `;
@@ -367,21 +373,16 @@ function groupServicesByDestination(companyServices) {
 function renderCompanyService(service) {
   return `
     <div class="service-item">
-      <div>
-        <small>Destino</small>
-        <strong>${service.destination}</strong>
+      <div class="service-destination">
+        ${locationIcon()}
+        <div>
+          <small>Destino</small>
+          <strong>${service.destination}</strong>
+        </div>
       </div>
-      <div>
+      <div class="service-time">
         <small>Horario / frecuencia</small>
         <span>${service.times}</span>
-      </div>
-      <div>
-        <small>Servicio</small>
-        <span>${service.services}</span>
-      </div>
-      <div>
-        <small>Boletería</small>
-        <span>${service.availability}</span>
       </div>
     </div>
   `;
