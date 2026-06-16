@@ -343,9 +343,18 @@ button {
 }
 
 .hero-action svg {
+  fill: none;
   height: 22px;
+  stroke: currentColor;
   stroke-width: 2.2;
   width: 22px;
+}
+
+.hero-action svg path {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .hero-action.primary {
