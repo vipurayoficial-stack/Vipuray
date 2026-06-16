@@ -11,11 +11,7 @@ const defaultData = {
     { name: "Buses Oro Verde", logo: "Oro Verde", logoImage: "assets/company-logos/buses-oro-verde.png", destinations: "Santiago", ticketOffice: "N° 7" },
     { name: "Buses Lista Azul", logo: "Lista Azul", logoImage: "assets/company-logos/buses-lista-azul.png", destinations: "Santiago", ticketOffice: "N° 8" },
     { name: "Buses Barahona", logo: "Barahona", logoImage: "assets/company-logos/buses-barahona.png", destinations: "Pitrufquén, Temuco", ticketOffice: "Consultar" },
-    { name: "Buses Manuel Armona", logo: "Armona", logoImage: "assets/company-logos/buses-armona.png", destinations: "El Coihue, Milleuco, Chaura", ticketOffice: "Zona rural" },
-    { name: "Buses Leonardo del Valle", logo: "Del Valle", logoImage: "assets/company-logos/buses-del-valle.png", destinations: "Voipir Seco, Huincacara, Relún, Challupén", ticketOffice: "Zona rural" },
-    { name: "Transportes Esperanza (Surtran)", logo: "Surtran", logoImage: "assets/company-logos/buses-surtran.png", destinations: "Malloco Lolenco, Huilipilun Alto, Puente Long Long", ticketOffice: "Zona rural" },
-    { name: "Buses E.De.T. De Eoca Bus Limitada", logo: "E.De.T.", logoImage: "assets/company-logos/buses-edet.png", destinations: "Catrico, Rayen Lafquen", ticketOffice: "Zona rural" },
-    { name: "Buses José Castillo", logo: "José Castillo", logoImage: "", destinations: "Los Copihues, Rallenlafquen, Funalhue, Copihuelpe, Pinohuacho, Los Laureles", ticketOffice: "Zona rural" }
+    { name: "Servicios rurales", logo: "Rural", logoImage: "", destinations: "El Coihue, Milleuco, Chaura, Voipir Seco, Huincacara, Relún, Challupén, Malloco Lolenco, Huilipilun Alto, Puente Long Long, Catrico, Rayen Lafquen y más", ticketOffice: "Consultar" }
   ],
   services: [
     { id: "VIP-PUC", destination: "Pucón", time: "Consultar en boletería", company: "Buses Vipu Ray", service: "Ventas de pasajes", price: null, availability: "Boletería N° 2" },
@@ -30,24 +26,24 @@ const defaultData = {
     { id: "LIS-SAN", destination: "Santiago", time: "Consultar en boletería", company: "Buses Lista Azul", service: "Ventas de pasajes", price: null, availability: "Boletería N° 8" },
     { id: "BAR-PIT", destination: "Pitrufquén", time: "Consultar horarios", company: "Buses Barahona", service: "Consultar en terminal", price: null, availability: "Consultar en terminal" },
     { id: "BAR-TEM", destination: "Temuco", time: "Consultar horarios", company: "Buses Barahona", service: "Consultar en terminal", price: null, availability: "Consultar en terminal" },
-    { id: "ARM-COI-1300", destination: "El Coihue", time: "Lunes a viernes 13:00 y 19:00 / sábado 13:00", company: "Buses Manuel Armona", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "ARM-MIL-1600", destination: "Milleuco", time: "Lunes a viernes 16:00", company: "Buses Manuel Armona", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "ARM-CHA", destination: "Chaura", time: "Lunes a viernes 12:00 y 17:00", company: "Buses Manuel Armona", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "LEO-VOI", destination: "Voipir Seco", time: "Lunes a viernes 13:00 / lunes a sábado 17:00", company: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "LEO-HUI", destination: "Huincacara", time: "Lunes a viernes 13:00 / lunes a sábado 17:00", company: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "LEO-REL", destination: "Relún", time: "Lunes, miércoles y viernes 13:00 y 17:00", company: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "LEO-CHA", destination: "Challupén", time: "Lunes a viernes 16:00", company: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "ESP-MAL", destination: "Malloco Lolenco", time: "Lunes a viernes 16:30", company: "Transportes Esperanza (Surtran)", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "ESP-HUI", destination: "Huilipilun Alto", time: "Consultar en terminal", company: "Transportes Esperanza (Surtran)", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "ESP-LON", destination: "Puente Long Long", time: "18:00", company: "Transportes Esperanza (Surtran)", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "EDET-CAT", destination: "Catrico", time: "Lunes a viernes 16:00", company: "Buses E.De.T. De Eoca Bus Limitada", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "EDET-RAY", destination: "Rayen Lafquen", time: "Lunes a viernes 16:00", company: "Buses E.De.T. De Eoca Bus Limitada", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "CAS-COP", destination: "Los Copihues", time: "Lunes, miércoles y viernes 13:00 / lunes a viernes 18:30", company: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "CAS-RAL", destination: "Rallenlafquen", time: "Lunes a viernes 16:30", company: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "CAS-FUN", destination: "Funalhue", time: "Lunes a viernes 18:30 / lunes a sábado 13:00", company: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "CAS-CPE", destination: "Copihuelpe", time: "Lunes a sábado 13:00 y 17:00", company: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "CAS-PIN", destination: "Pinohuacho", time: "Lunes a viernes 16:30", company: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "CAS-LAU", destination: "Los Laureles", time: "Martes y jueves 16:00", company: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" }
+    { id: "ARM-COI-1300", destination: "El Coihue", time: "Lunes a viernes 13:00 y 19:00 / sábado 13:00", company: "Servicios rurales", operator: "Buses Manuel Armona", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "ARM-MIL-1600", destination: "Milleuco", time: "Lunes a viernes 16:00", company: "Servicios rurales", operator: "Buses Manuel Armona", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "ARM-CHA", destination: "Chaura", time: "Lunes a viernes 12:00 y 17:00", company: "Servicios rurales", operator: "Buses Manuel Armona", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "LEO-VOI", destination: "Voipir Seco", time: "Lunes a viernes 13:00 / lunes a sábado 17:00", company: "Servicios rurales", operator: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "LEO-HUI", destination: "Huincacara", time: "Lunes a viernes 13:00 / lunes a sábado 17:00", company: "Servicios rurales", operator: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "LEO-REL", destination: "Relún", time: "Lunes, miércoles y viernes 13:00 y 17:00", company: "Servicios rurales", operator: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "LEO-CHA", destination: "Challupén", time: "Lunes a viernes 16:00", company: "Servicios rurales", operator: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "ESP-MAL", destination: "Malloco Lolenco", time: "Lunes a viernes 16:30", company: "Servicios rurales", operator: "Transportes Esperanza (Surtran)", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "ESP-HUI", destination: "Huilipilun Alto", time: "Consultar en terminal", company: "Servicios rurales", operator: "Transportes Esperanza (Surtran)", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "ESP-LON", destination: "Puente Long Long", time: "18:00", company: "Servicios rurales", operator: "Transportes Esperanza (Surtran)", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "EDET-CAT", destination: "Catrico", time: "Lunes a viernes 16:00", company: "Servicios rurales", operator: "Buses E.De.T. De Eoca Bus Limitada", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "EDET-RAY", destination: "Rayen Lafquen", time: "Lunes a viernes 16:00", company: "Servicios rurales", operator: "Buses E.De.T. De Eoca Bus Limitada", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "CAS-COP", destination: "Los Copihues", time: "Lunes, miércoles y viernes 13:00 / lunes a viernes 18:30", company: "Servicios rurales", operator: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "CAS-RAL", destination: "Rallenlafquen", time: "Lunes a viernes 16:30", company: "Servicios rurales", operator: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "CAS-FUN", destination: "Funalhue", time: "Lunes a viernes 18:30 / lunes a sábado 13:00", company: "Servicios rurales", operator: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "CAS-CPE", destination: "Copihuelpe", time: "Lunes a sábado 13:00 y 17:00", company: "Servicios rurales", operator: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "CAS-PIN", destination: "Pinohuacho", time: "Lunes a viernes 16:30", company: "Servicios rurales", operator: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "CAS-LAU", destination: "Los Laureles", time: "Martes y jueves 16:00", company: "Servicios rurales", operator: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" }
   ],
   infoSlides: [
     {
@@ -144,6 +140,21 @@ let analyticsState = {
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+const RURAL_GROUP_NAME = "Servicios rurales";
+const RURAL_COMPANY_NAMES = new Set([
+  "Buses Manuel Armona",
+  "Buses Leonardo del Valle",
+  "Transportes Esperanza (Surtran)",
+  "Buses E.De.T. De Eoca Bus Limitada",
+  "Buses José Castillo"
+]);
+const RURAL_COMPANY = {
+  name: RURAL_GROUP_NAME,
+  logo: "Rural",
+  logoImage: "",
+  destinations: "El Coihue, Milleuco, Chaura, Voipir Seco, Huincacara, Relún, Challupén, Malloco Lolenco, Huilipilun Alto, Puente Long Long, Catrico, Rayen Lafquen y más",
+  ticketOffice: "Consultar"
+};
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
@@ -154,12 +165,31 @@ function loadData() {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
     if (saved && Array.isArray(saved.companies) && Array.isArray(saved.services) && Array.isArray(saved.infoSlides)) {
       if (!Array.isArray(saved.reports)) saved.reports = clone(defaultData.reports);
+      saved.companies = normalizeCompanies(saved.companies);
+      saved.services = normalizeServices(saved.services);
       return saved;
     }
   } catch (error) {
     console.warn("No se pudieron cargar los datos guardados.", error);
   }
   return clone(defaultData);
+}
+
+function normalizeCompanies(items) {
+  const visibleCompanies = items.filter((company) => !RURAL_COMPANY_NAMES.has(company.name));
+  const hasRuralGroup = visibleCompanies.some((company) => company.name === RURAL_GROUP_NAME);
+  return hasRuralGroup ? visibleCompanies : [...visibleCompanies, { ...RURAL_COMPANY }];
+}
+
+function normalizeServices(items) {
+  return items.map((service) => {
+    if (!RURAL_COMPANY_NAMES.has(service.company)) return service;
+    return {
+      ...service,
+      company: RURAL_GROUP_NAME,
+      operator: service.operator || service.company
+    };
+  });
 }
 
 function saveData(message = "Cambios guardados.") {

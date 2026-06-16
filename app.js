@@ -40,24 +40,24 @@ const services = [
   { id: "LIS-SAN", destination: "Santiago", time: "Consultar en boletería", company: "Buses Lista Azul", service: "Ventas de pasajes", price: null, availability: "Boletería N° 8" },
   { id: "BAR-PIT", destination: "Pitrufquén", time: "Consultar horarios", company: "Buses Barahona", service: "Consultar en terminal", price: null, availability: "Consultar en terminal" },
   { id: "BAR-TEM", destination: "Temuco", time: "Consultar horarios", company: "Buses Barahona", service: "Consultar en terminal", price: null, availability: "Consultar en terminal" },
-  { id: "ARM-COI-1300", destination: "El Coihue", time: "Lunes a viernes 13:00 y 19:00 / sábado 13:00", company: "Buses Manuel Armona", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-  { id: "ARM-MIL-1600", destination: "Milleuco", time: "Lunes a viernes 16:00", company: "Buses Manuel Armona", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-  { id: "ARM-CHA", destination: "Chaura", time: "Lunes a viernes 12:00 y 17:00", company: "Buses Manuel Armona", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-  { id: "LEO-VOI", destination: "Voipir Seco", time: "Lunes a viernes 13:00 / lunes a sábado 17:00", company: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-  { id: "LEO-HUI", destination: "Huincacara", time: "Lunes a viernes 13:00 / lunes a sábado 17:00", company: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-  { id: "LEO-REL", destination: "Relún", time: "Lunes, miércoles y viernes 13:00 y 17:00", company: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-  { id: "LEO-CHA", destination: "Challupén", time: "Lunes a viernes 16:00", company: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-  { id: "ESP-MAL", destination: "Malloco Lolenco", time: "Lunes a viernes 16:30", company: "Transportes Esperanza (Surtran)", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-  { id: "ESP-HUI", destination: "Huilipilun Alto", time: "Consultar en terminal", company: "Transportes Esperanza (Surtran)", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-  { id: "ESP-LON", destination: "Puente Long Long", time: "18:00", company: "Transportes Esperanza (Surtran)", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-  { id: "EDET-CAT", destination: "Catrico", time: "Lunes a viernes 16:00", company: "Buses E.De.T. De Eoca Bus Limitada", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-  { id: "EDET-RAY", destination: "Rayen Lafquen", time: "Lunes a viernes 16:00", company: "Buses E.De.T. De Eoca Bus Limitada", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-  { id: "CAS-COP", destination: "Los Copihues", time: "Lunes, miércoles y viernes 13:00 / lunes a viernes 18:30", company: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-  { id: "CAS-RAL", destination: "Rallenlafquen", time: "Lunes a viernes 16:30", company: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-  { id: "CAS-FUN", destination: "Funalhue", time: "Lunes a viernes 18:30 / lunes a sábado 13:00", company: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-  { id: "CAS-CPE", destination: "Copihuelpe", time: "Lunes a sábado 13:00 y 17:00", company: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-  { id: "CAS-PIN", destination: "Pinohuacho", time: "Lunes a viernes 16:30", company: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-  { id: "CAS-LAU", destination: "Los Laureles", time: "Martes y jueves 16:00", company: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" }
+  { id: "ARM-COI-1300", destination: "El Coihue", time: "Lunes a viernes 13:00 y 19:00 / sábado 13:00", company: "Servicios rurales", operator: "Buses Manuel Armona", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+  { id: "ARM-MIL-1600", destination: "Milleuco", time: "Lunes a viernes 16:00", company: "Servicios rurales", operator: "Buses Manuel Armona", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+  { id: "ARM-CHA", destination: "Chaura", time: "Lunes a viernes 12:00 y 17:00", company: "Servicios rurales", operator: "Buses Manuel Armona", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+  { id: "LEO-VOI", destination: "Voipir Seco", time: "Lunes a viernes 13:00 / lunes a sábado 17:00", company: "Servicios rurales", operator: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+  { id: "LEO-HUI", destination: "Huincacara", time: "Lunes a viernes 13:00 / lunes a sábado 17:00", company: "Servicios rurales", operator: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+  { id: "LEO-REL", destination: "Relún", time: "Lunes, miércoles y viernes 13:00 y 17:00", company: "Servicios rurales", operator: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+  { id: "LEO-CHA", destination: "Challupén", time: "Lunes a viernes 16:00", company: "Servicios rurales", operator: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+  { id: "ESP-MAL", destination: "Malloco Lolenco", time: "Lunes a viernes 16:30", company: "Servicios rurales", operator: "Transportes Esperanza (Surtran)", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+  { id: "ESP-HUI", destination: "Huilipilun Alto", time: "Consultar en terminal", company: "Servicios rurales", operator: "Transportes Esperanza (Surtran)", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+  { id: "ESP-LON", destination: "Puente Long Long", time: "18:00", company: "Servicios rurales", operator: "Transportes Esperanza (Surtran)", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+  { id: "EDET-CAT", destination: "Catrico", time: "Lunes a viernes 16:00", company: "Servicios rurales", operator: "Buses E.De.T. De Eoca Bus Limitada", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+  { id: "EDET-RAY", destination: "Rayen Lafquen", time: "Lunes a viernes 16:00", company: "Servicios rurales", operator: "Buses E.De.T. De Eoca Bus Limitada", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+  { id: "CAS-COP", destination: "Los Copihues", time: "Lunes, miércoles y viernes 13:00 / lunes a viernes 18:30", company: "Servicios rurales", operator: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+  { id: "CAS-RAL", destination: "Rallenlafquen", time: "Lunes a viernes 16:30", company: "Servicios rurales", operator: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+  { id: "CAS-FUN", destination: "Funalhue", time: "Lunes a viernes 18:30 / lunes a sábado 13:00", company: "Servicios rurales", operator: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+  { id: "CAS-CPE", destination: "Copihuelpe", time: "Lunes a sábado 13:00 y 17:00", company: "Servicios rurales", operator: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+  { id: "CAS-PIN", destination: "Pinohuacho", time: "Lunes a viernes 16:30", company: "Servicios rurales", operator: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+  { id: "CAS-LAU", destination: "Los Laureles", time: "Martes y jueves 16:00", company: "Servicios rurales", operator: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" }
 ];
 
 const companies = [
@@ -69,11 +69,7 @@ const companies = [
   { name: "Buses Oro Verde", logo: "Oro Verde", logoImage: "assets/company-logos/buses-oro-verde.png", destinations: "Santiago", ticketOffice: "N° 7" },
   { name: "Buses Lista Azul", logo: "Lista Azul", logoImage: "assets/company-logos/buses-lista-azul.png", destinations: "Santiago", ticketOffice: "N° 8" },
   { name: "Buses Barahona", logo: "Barahona", logoImage: "assets/company-logos/buses-barahona.png", destinations: "Pitrufquén, Temuco", ticketOffice: "Consultar" },
-  { name: "Buses Manuel Armona", logo: "Armona", logoImage: "assets/company-logos/buses-armona.png", destinations: "El Coihue, Milleuco, Chaura", ticketOffice: "Zona rural" },
-  { name: "Buses Leonardo del Valle", logo: "Del Valle", logoImage: "assets/company-logos/buses-del-valle.png", destinations: "Voipir Seco, Huincacara, Relún, Challupén", ticketOffice: "Zona rural" },
-  { name: "Transportes Esperanza (Surtran)", logo: "Surtran", logoImage: "assets/company-logos/buses-surtran.png", destinations: "Malloco Lolenco, Huilipilun Alto, Puente Long Long", ticketOffice: "Zona rural" },
-  { name: "Buses E.De.T. De Eoca Bus Limitada", logo: "E.De.T.", logoImage: "assets/company-logos/buses-edet.png", destinations: "Catrico, Rayen Lafquen", ticketOffice: "Zona rural" },
-  { name: "Buses José Castillo", logo: "José Castillo", logoImage: "", destinations: "Los Copihues, Rallenlafquen, Funalhue, Copihuelpe, Pinohuacho, Los Laureles", ticketOffice: "Zona rural" }
+  { name: "Servicios rurales", logo: "Rural", logoImage: "", destinations: "El Coihue, Milleuco, Chaura, Voipir Seco, Huincacara, Relún, Challupén, Malloco Lolenco, Huilipilun Alto, Puente Long Long, Catrico, Rayen Lafquen y más", ticketOffice: "Consultar" }
 ];
 
 const state = {
@@ -107,6 +103,7 @@ const companyCardThemeByName = {
   "Buses Oro Verde": { accent: "#7bd64a", tint: "rgba(3, 39, 42, 0.94)", plate: "rgba(255, 255, 255, 0.24)" },
   "Buses Lista Azul": { accent: "#075cff", tint: "rgba(0, 20, 92, 0.92)", plate: "rgba(255, 255, 255, 0.24)" },
   "Buses Barahona": { accent: "#2053d6", tint: "rgba(2, 24, 94, 0.92)", plate: "rgba(255, 255, 255, 0.18)" },
+  "Servicios rurales": { accent: "#1bbf90", tint: "rgba(0, 76, 88, 0.92)", plate: "rgba(255, 255, 255, 0.14)" },
   "Buses Manuel Armona": { accent: "#8a35ff", tint: "rgba(66, 21, 130, 0.9)", plate: "rgba(255, 255, 255, 0.24)" },
   "Buses Leonardo del Valle": { accent: "#ffffff", tint: "rgba(31, 44, 59, 0.9)", plate: "rgba(0, 12, 28, 0.34)" },
   "Transportes Esperanza (Surtran)": { accent: "#9cff31", tint: "rgba(22, 94, 0, 0.91)", plate: "rgba(255, 255, 255, 0.16)" },
@@ -174,6 +171,21 @@ const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selec
 const DASHBOARD_STORAGE_KEY = "vipurayDashboardData";
 const ANALYTICS_STORAGE_KEY = "vipurayAnalyticsEvents";
 const ANALYTICS_SESSION_KEY = "vipurayAnalyticsSession";
+const RURAL_GROUP_NAME = "Servicios rurales";
+const RURAL_COMPANY_NAMES = new Set([
+  "Buses Manuel Armona",
+  "Buses Leonardo del Valle",
+  "Transportes Esperanza (Surtran)",
+  "Buses E.De.T. De Eoca Bus Limitada",
+  "Buses José Castillo"
+]);
+const RURAL_COMPANY = {
+  name: RURAL_GROUP_NAME,
+  logo: "Rural",
+  logoImage: "",
+  destinations: "El Coihue, Milleuco, Chaura, Voipir Seco, Huincacara, Relún, Challupén, Malloco Lolenco, Huilipilun Alto, Puente Long Long, Catrico, Rayen Lafquen y más",
+  ticketOffice: "Consultar"
+};
 
 const formatMoney = (value) =>
   new Intl.NumberFormat("es-CL", { style: "currency", currency: "CLP", maximumFractionDigits: 0 }).format(value);
@@ -200,11 +212,11 @@ function applyDashboardData() {
     if (!saved || typeof saved !== "object") return;
 
     if (Array.isArray(saved.companies) && saved.companies.length) {
-      companies.splice(0, companies.length, ...saved.companies);
+      companies.splice(0, companies.length, ...normalizeCompanies(saved.companies));
     }
 
     if (Array.isArray(saved.services) && saved.services.length) {
-      services.splice(0, services.length, ...saved.services);
+      services.splice(0, services.length, ...normalizeServices(saved.services));
     }
 
     if (Array.isArray(saved.infoSlides) && saved.infoSlides.length) {
@@ -213,6 +225,23 @@ function applyDashboardData() {
   } catch (error) {
     console.warn("No se pudieron cargar los datos del dashboard.", error);
   }
+}
+
+function normalizeCompanies(items) {
+  const visibleCompanies = items.filter((company) => !RURAL_COMPANY_NAMES.has(company.name));
+  const hasRuralGroup = visibleCompanies.some((company) => company.name === RURAL_GROUP_NAME);
+  return hasRuralGroup ? visibleCompanies : [...visibleCompanies, { ...RURAL_COMPANY }];
+}
+
+function normalizeServices(items) {
+  return items.map((service) => {
+    if (!RURAL_COMPANY_NAMES.has(service.company)) return service;
+    return {
+      ...service,
+      company: RURAL_GROUP_NAME,
+      operator: service.operator || service.company
+    };
+  });
 }
 
 function populateSearch() {
@@ -226,10 +255,14 @@ function populateSearch() {
 
 function renderDestinations() {
   const grid = $("[data-destination-grid]");
+  const showAllButton = $("[data-show-all-destinations]");
   grid.innerHTML = companies
     .slice(0, state.visibleDestinations)
     .map((company, index) => renderCompanyCard(company, index))
     .join("");
+  if (showAllButton) {
+    showAllButton.hidden = companies.length <= 12;
+  }
   prepareRevealElements($$(".destination-card", grid));
 }
 
@@ -262,6 +295,7 @@ function renderCompanyCard(company, index) {
 }
 
 function getCompanyDisplayName(company) {
+  if (company.name === RURAL_GROUP_NAME) return { prefix: "Servicios", highlight: "rurales" };
   if (company.name === "Transportes Esperanza (Surtran)") return { prefix: "Buses", highlight: "Surtran" };
   if (company.name === "Buses E.De.T. De Eoca Bus Limitada") return { prefix: "Buses", highlight: "E.De.T." };
   if (company.name === "Buses Manuel Armona") return { prefix: "Buses", highlight: "Armona" };
@@ -299,12 +333,18 @@ function renderResults(companyName) {
   const groupedServices = groupServicesByDestination(matchedServices);
   const serviceTypes = [...new Set(matchedServices.map((service) => service.service))].join(", ");
   const destinationCount = groupedServices.length;
+  const isRural = company.name === RURAL_GROUP_NAME;
+  const destinationLabel = destinationCount === 1 ? "Destino disponible" : "Destinos disponibles";
+  const resultCountLabel = destinationCount === 1 ? "destino encontrado" : "destinos encontrados";
+  const logoMarkup = company.logoImage
+    ? `<img src="${company.logoImage}" alt="${company.name}">`
+    : `<span>${company.logo}</span>`;
 
   results.innerHTML = `
     <article class="result-card route-summary-card company-result-card">
-      <div class="result-top company-result-header">
+      <div class="company-result-hero">
         <div class="company-result-title">
-          ${company.logoImage ? `<img src="${company.logoImage}" alt="${company.name}">` : `<span>${company.logo}</span>`}
+          ${logoMarkup}
           <div>
             <div class="route-title">${company.name}</div>
             <p>Información disponible desde el Terminal de Buses Vipu-Ray.</p>
@@ -312,32 +352,43 @@ function renderResults(companyName) {
         </div>
         <div class="company-result-actions">
           <span class="company-pill">${ticketIcon()}Boletería ${company.ticketOffice}</span>
-          <a class="table-action" href="${companyEmailUrl(company.name)}">Consultar por correo</a>
+          <a class="table-action" href="${companyEmailUrl(company.name)}">${mailIcon()}Consultar por correo</a>
         </div>
       </div>
       <div class="company-info-grid">
         <div class="company-info-item primary">
-          <small>Destinos disponibles</small>
+          ${locationIcon()}
+          <div>
+          <small>${destinationLabel}</small>
           <strong>${company.destinations}</strong>
+          </div>
         </div>
         <div class="company-info-item">
+          ${ticketIcon()}
+          <div>
           <small>Servicio disponible</small>
-          <strong>${serviceTypes}</strong>
+          <strong>${isRural ? "Recorridos rurales" : serviceTypes}</strong>
+          </div>
         </div>
       </div>
-      <div class="service-list-header">
-        <div>
+      <div class="company-services-panel">
+        <div class="service-list-header">
+          <div class="service-list-title">
+            ${searchIcon()}
+            <div>
           <small>Consulta de salidas</small>
-          <strong>${destinationCount} ${destinationCount === 1 ? "destino encontrado" : "destinos encontrados"}</strong>
+              <strong>${destinationCount} ${resultCountLabel}</strong>
+            </div>
+          </div>
+          <span>${infoIcon()}Horarios y frecuencias referenciales. Confirma siempre con la empresa.</span>
         </div>
-        <span>Horarios y frecuencias referenciales. Confirma siempre con la empresa.</span>
-      </div>
-      <div class="service-list">
-        ${groupedServices.map(renderCompanyService).join("")}
-      </div>
-      <div class="price-row">
-        <strong>Valores: consultar en boletería</strong>
-        <span>La venta o confirmación se realiza directamente con cada empresa.</span>
+        <div class="service-list">
+          ${groupedServices.map((service) => renderCompanyService(service, isRural)).join("")}
+        </div>
+        <div class="price-row">
+          <strong>${ticketIcon()}Valores: consultar en boletería</strong>
+          <span>La venta o confirmación se realiza directamente con cada empresa.</span>
+        </div>
       </div>
     </article>
   `;
@@ -352,7 +403,8 @@ function groupServicesByDestination(companyServices) {
         destination: service.destination,
         times: new Set(),
         services: new Set(),
-        availability: new Set()
+        availability: new Set(),
+        operators: new Set()
       });
     }
 
@@ -360,17 +412,19 @@ function groupServicesByDestination(companyServices) {
     group.times.add(service.time);
     group.services.add(service.service);
     group.availability.add(service.availability);
+    if (service.operator) group.operators.add(service.operator);
   });
 
   return Array.from(groups.values()).map((group) => ({
     destination: group.destination,
     times: Array.from(group.times).join(" / "),
     services: Array.from(group.services).join(", "),
-    availability: Array.from(group.availability).join(", ")
+    availability: Array.from(group.availability).join(", "),
+    operators: Array.from(group.operators).join(", ")
   }));
 }
 
-function renderCompanyService(service) {
+function renderCompanyService(service, showOperator = false) {
   return `
     <div class="service-item">
       <div class="service-destination">
@@ -378,11 +432,15 @@ function renderCompanyService(service) {
         <div>
           <small>Destino</small>
           <strong>${service.destination}</strong>
+          ${showOperator && service.operators ? `<em>${service.operators}</em>` : ""}
         </div>
       </div>
       <div class="service-time">
+        ${clockIcon()}
+        <div>
         <small>Horario / frecuencia</small>
         <span>${service.times}</span>
+        </div>
       </div>
     </div>
   `;
@@ -738,6 +796,22 @@ function locationIcon() {
 
 function ticketIcon() {
   return `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 8a2 2 0 0 1 2-2h12v4a2 2 0 0 0 0 4v4H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4V8Z"/><path d="M9 9h5M9 15h5"/></svg>`;
+}
+
+function clockIcon() {
+  return `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 7v5l3 2"/><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>`;
+}
+
+function searchIcon() {
+  return `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="m21 21-4.3-4.3"/><path d="M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"/></svg>`;
+}
+
+function infoIcon() {
+  return `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 16v-4"/><path d="M12 8h.01"/><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>`;
+}
+
+function mailIcon() {
+  return `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>`;
 }
 
 function arrowIcon() {
