@@ -254,6 +254,21 @@ function canonicalCompanyName(value = "") {
   return String(value).trim().replace(/\s+/g, " ");
 }
 
+function hasNumberedTicketOffice(ticketOffice = "") {
+  const clean = String(ticketOffice).trim();
+  const key = normalizedKey(clean);
+  if (!clean || key.includes("consultar") || key.includes("no posee")) return false;
+  return /\d/.test(clean);
+}
+
+function formatPriceConsultation(company) {
+  if (!hasNumberedTicketOffice(company.ticketOffice)) {
+    return "Valor: consultar valor vigente con el conductor del servicio";
+  }
+
+  return `Valores: consultar en boletería ${company.ticketOffice}`;
+}
+
 function mergeCompany(existing, incoming) {
   return {
     ...existing,
@@ -395,6 +410,7 @@ function renderResults(companyName) {
   const destinationCount = groupedServices.length;
   const destinationLabel = destinationCount === 1 ? "Destino disponible" : "Destinos disponibles";
   const resultCountLabel = destinationCount === 1 ? "destino encontrado" : "destinos encontrados";
+  const priceConsultation = formatPriceConsultation(company);
   const logoMarkup = company.logoImage
     ? `<img src="${company.logoImage}" alt="${company.name}">`
     : `<span>${company.logo}</span>`;
@@ -432,13 +448,12 @@ function renderResults(companyName) {
               <strong>${destinationCount} ${resultCountLabel}</strong>
             </div>
           </div>
-          <span>${infoIcon()}Horarios y frecuencias referenciales. Confirma siempre con la empresa.</span>
         </div>
         <div class="service-list">
           ${groupedServices.map((service) => renderCompanyService(service)).join("")}
         </div>
         <div class="price-row">
-          <strong>${ticketIcon()}Valores: consultar en boletería</strong>
+          <strong>${ticketIcon()}${priceConsultation}</strong>
           <span>La venta o confirmación se realiza directamente con cada empresa.</span>
         </div>
       </div>

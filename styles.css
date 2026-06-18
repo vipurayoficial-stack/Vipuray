@@ -1218,7 +1218,7 @@ h2 {
   border-bottom: 0;
   display: flex;
   gap: 16px;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 0 0 2px;
 }
 
@@ -1258,31 +1258,6 @@ h2 {
   display: block;
   font-size: 21px;
   line-height: 1.2;
-}
-
-.service-list-header span {
-  align-items: center;
-  background: rgba(238, 247, 255, 0.9);
-  border: 1px solid rgba(0, 119, 217, 0.14);
-  border-radius: 10px;
-  color: var(--blue-dark);
-  display: inline-flex;
-  font-size: 13px;
-  font-weight: 700;
-  gap: 8px;
-  line-height: 1.35;
-  max-width: 400px;
-  padding: 10px 12px;
-}
-
-.service-list-header span svg {
-  fill: none;
-  flex: 0 0 18px;
-  height: 18px;
-  stroke: var(--blue);
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  width: 18px;
 }
 
 .service-list {
@@ -2554,7 +2529,6 @@ tr:last-child td {
     flex-direction: column;
   }
 
-  .service-list-header span,
   .price-row span {
     max-width: none;
     text-align: left;
