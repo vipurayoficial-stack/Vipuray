@@ -655,9 +655,15 @@ function getDefaultServiceForCompany(companyName) {
   return getCompanyServices(companyName)[0]?.service || "Ventas de pasajes";
 }
 
+function shouldAutoUpdateCompanyDestinations(company) {
+  const current = normalizedKey(company.destinations || "");
+  return !current || current === "destino" || current === "sin destinos configurados";
+}
+
 function syncCompanyDestinationsFromServices(companyName) {
   const company = getCompanyByName(companyName);
   if (!company) return;
+  if (!shouldAutoUpdateCompanyDestinations(company)) return;
   const destinations = Array.from(new Set(getCompanyServices(company.name).map((service) => service.destination.trim()).filter(Boolean)));
   company.destinations = destinations.length ? destinations.join(", ") : "Sin destinos configurados";
 }
