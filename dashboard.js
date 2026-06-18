@@ -594,7 +594,7 @@ function renderCompanyUnifiedEditor(company) {
   `;
 
   note.textContent = isRural
-    ? "Servicios Rurales funciona como una sola tarjeta. Edita aqui solo destino y horario/frecuencia."
+    ? "Servicios Rurales funciona como una sola tarjeta. Edita aqui solo destino y horario."
     : "Cada destino que edites aqui actualiza la informacion que aparece al consultar esta empresa en la web.";
 
   if (!services.length) {
@@ -615,7 +615,7 @@ function renderCompanyServiceEditor(service, index, isRural) {
           <input data-route-field="destination" value="${escapeHtml(service.destination)}" required>
         </label>
         <label>
-          <span>Horario o frecuencia</span>
+          <span>Horario</span>
           <textarea data-route-field="time" rows="2" required>${escapeHtml(service.time)}</textarea>
         </label>
         ${isRural ? "" : `
@@ -1020,7 +1020,7 @@ function bindEvents() {
       const service = {
         id: createServiceId({ company: company.name, destination: "Nuevo destino" }),
         destination: "Nuevo destino",
-        time: isRuralGroupName(company.name) ? "Indicar horario o frecuencia" : "Consultar en boletería",
+        time: isRuralGroupName(company.name) ? "Indicar horario" : "Consultar en boletería",
         company: company.name,
         service: getDefaultServiceForCompany(company.name),
         price: null,
@@ -1048,7 +1048,7 @@ function bindEvents() {
 
     const route = readRouteEditor(row, company);
     if (!route) {
-      showToast("Completa destino y horario/frecuencia.");
+      showToast("Completa destino y horario.");
       return;
     }
     route.id = route.id || createServiceId(route);

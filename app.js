@@ -501,7 +501,7 @@ function renderCompanyService(service) {
       <div class="service-time">
         ${clockIcon()}
         <div>
-        <small>Horario / frecuencia</small>
+        <small>Horario</small>
         <span>${service.times}</span>
         </div>
       </div>
