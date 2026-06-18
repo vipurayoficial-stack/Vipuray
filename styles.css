@@ -767,13 +767,31 @@ h2 {
     drop-shadow(0 8px 12px rgba(0, 0, 0, 0.3));
 }
 
-.company-card-badge.has-logo img[src*="buses-conaripe"],
 .company-card-badge.has-logo img[src*="buses-surtran"] {
   mix-blend-mode: screen;
 }
 
 .company-card-badge.has-logo img[src*="buses-conaripe"] {
+  filter:
+    brightness(1.18)
+    contrast(1.2)
+    saturate(1.14)
+    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.18))
+    drop-shadow(0 10px 14px rgba(0, 0, 0, 0.34));
+  mix-blend-mode: normal;
   transform: scale(2.65);
+  z-index: 2;
+}
+
+.company-card-badge.has-logo img[src*="servicios-rurales"] {
+  border-radius: 10px;
+  filter:
+    brightness(1.08)
+    contrast(1.14)
+    saturate(1.12)
+    drop-shadow(0 10px 14px rgba(0, 0, 0, 0.28));
+  object-fit: contain;
+  transform: scale(1.1);
 }
 
 .company-card-badge.has-logo img[src*="buses-lista-azul"] {

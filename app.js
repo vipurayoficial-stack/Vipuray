@@ -69,7 +69,7 @@ const companies = [
   { name: "Buses Oro Verde", logo: "Oro Verde", logoImage: "assets/company-logos/buses-oro-verde.png", destinations: "Santiago", ticketOffice: "N° 7" },
   { name: "Buses Lista Azul", logo: "Lista Azul", logoImage: "assets/company-logos/buses-lista-azul.png", destinations: "Santiago", ticketOffice: "N° 8" },
   { name: "Buses Barahona", logo: "Barahona", logoImage: "assets/company-logos/buses-barahona.png", destinations: "Pitrufquén, Temuco", ticketOffice: "Consultar" },
-  { name: "Servicios rurales", logo: "Rural", logoImage: "", destinations: "El Coihue, Milleuco, Chaura, Voipir Seco, Huincacara, Relún, Challupén, Malloco Lolenco, Huilipilun Alto, Puente Long Long, Catrico, Rayen Lafquen y más", ticketOffice: "Consultar" }
+  { name: "Servicios rurales", logo: "Rural", logoImage: "assets/company-logos/servicios-rurales.png", destinations: "El Coihue, Milleuco, Chaura, Voipir Seco, Huincacara, Relún, Challupén, Malloco Lolenco, Huilipilun Alto, Puente Long Long, Catrico, Rayen Lafquen y más", ticketOffice: "Consultar" }
 ];
 
 const state = {
@@ -182,7 +182,7 @@ const RURAL_COMPANY_NAMES = new Set([
 const RURAL_COMPANY = {
   name: RURAL_GROUP_NAME,
   logo: "Rural",
-  logoImage: "",
+  logoImage: "assets/company-logos/servicios-rurales.png",
   destinations: "El Coihue, Milleuco, Chaura, Voipir Seco, Huincacara, Relún, Challupén, Malloco Lolenco, Huilipilun Alto, Puente Long Long, Catrico, Rayen Lafquen y más",
   ticketOffice: "Consultar"
 };
@@ -228,7 +228,16 @@ function applyDashboardData() {
 }
 
 function normalizeCompanies(items) {
-  const visibleCompanies = items.filter((company) => !RURAL_COMPANY_NAMES.has(company.name));
+  const visibleCompanies = items
+    .filter((company) => !RURAL_COMPANY_NAMES.has(company.name))
+    .map((company) => {
+      if (company.name !== RURAL_GROUP_NAME) return company;
+      return {
+        ...RURAL_COMPANY,
+        ...company,
+        logoImage: company.logoImage || RURAL_COMPANY.logoImage
+      };
+    });
   const hasRuralGroup = visibleCompanies.some((company) => company.name === RURAL_GROUP_NAME);
   return hasRuralGroup ? visibleCompanies : [...visibleCompanies, { ...RURAL_COMPANY }];
 }
