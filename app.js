@@ -392,9 +392,7 @@ function renderResults(companyName) {
   }
 
   const groupedServices = groupServicesByDestination(matchedServices);
-  const serviceTypes = [...new Set(matchedServices.map((service) => service.service))].join(", ");
   const destinationCount = groupedServices.length;
-  const isRural = company.name === RURAL_GROUP_NAME;
   const destinationLabel = destinationCount === 1 ? "Destino disponible" : "Destinos disponibles";
   const resultCountLabel = destinationCount === 1 ? "destino encontrado" : "destinos encontrados";
   const logoMarkup = company.logoImage
@@ -422,13 +420,6 @@ function renderResults(companyName) {
           <div>
           <small>${destinationLabel}</small>
           <strong>${company.destinations}</strong>
-          </div>
-        </div>
-        <div class="company-info-item">
-          ${ticketIcon()}
-          <div>
-          <small>Servicio disponible</small>
-          <strong>${isRural ? "Recorridos rurales" : serviceTypes}</strong>
           </div>
         </div>
       </div>

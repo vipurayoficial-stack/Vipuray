@@ -1146,7 +1146,7 @@ h2 {
 .company-info-grid {
   display: grid;
   gap: 0;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.72fr);
+  grid-template-columns: minmax(0, 1fr);
   margin: 0 28px;
   overflow: hidden;
   position: relative;
@@ -1162,10 +1162,6 @@ h2 {
   gap: 18px;
   min-height: 108px;
   padding: 22px 26px;
-}
-
-.company-info-item + .company-info-item {
-  border-left: 1px solid rgba(177, 204, 231, 0.72);
 }
 
 .company-info-item.primary {
@@ -1186,11 +1182,6 @@ h2 {
   stroke-linejoin: round;
   stroke-width: 2.2;
   width: 58px;
-}
-
-.company-info-item:nth-child(2) svg {
-  background: linear-gradient(135deg, rgba(27, 191, 144, 0.16), #ffffff);
-  stroke: #0cad91;
 }
 
 .company-info-grid small,
@@ -2395,7 +2386,6 @@ tr:last-child td {
     grid-template-columns: 1fr 1fr;
   }
 
-  .company-info-grid,
   .service-item {
     grid-template-columns: 1fr 1fr;
   }
@@ -2553,10 +2543,6 @@ tr:last-child td {
 
   .company-info-grid {
     grid-template-columns: 1fr;
-  }
-
-  .company-info-item + .company-info-item {
-    border-left: 0;
   }
 
   .service-item {
