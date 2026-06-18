@@ -21,7 +21,7 @@
         <a href="#resumen" class="active">Resumen</a>
         <a href="#datos">Datos</a>
         <a href="#empresas">Empresas</a>
-        <a href="#servicios">Horarios</a>
+        <a href="#servicios">Avanzado</a>
         <a href="#avisos">Avisos</a>
         <a href="#informes">Informes</a>
       </nav>
@@ -182,6 +182,7 @@
             </div>
             <button class="small-button" type="button" data-add-company>Agregar</button>
           </div>
+          <p class="panel-helper">Elige una empresa para modificar su tarjeta y sus destinos visibles desde una sola ficha.</p>
           <div class="company-list" data-company-list></div>
         </div>
 
@@ -193,26 +194,44 @@
               <h2 data-company-form-title>Selecciona una empresa</h2>
             </div>
           </div>
-          <label>
-            <span>Nombre oficial</span>
-            <input name="name" required>
-          </label>
-          <label>
-            <span>Nombre corto / logo texto</span>
-            <input name="logo" required>
-          </label>
-          <label>
-            <span>Ruta del logo</span>
-            <input name="logoImage" placeholder="assets/company-logos/logo.png">
-          </label>
-          <label>
-            <span>Destinos principales</span>
-            <textarea name="destinations" rows="3" required></textarea>
-          </label>
-          <label>
-            <span>Boleteria</span>
-            <input name="ticketOffice" required>
-          </label>
+          <div class="company-editor-hero" data-company-editor-hero></div>
+          <div class="form-cluster company-card-editor">
+            <div class="cluster-heading">
+              <span>01</span>
+              <strong>Datos de la tarjeta</strong>
+            </div>
+            <div class="form-grid two">
+              <label>
+                <span>Nombre oficial</span>
+                <input name="name" required>
+              </label>
+              <label>
+                <span>Nombre corto / logo texto</span>
+                <input name="logo" required>
+              </label>
+            </div>
+            <label>
+              <span>Ruta del logo</span>
+              <input name="logoImage" placeholder="assets/company-logos/logo.png">
+            </label>
+            <label>
+              <span>Destinos principales</span>
+              <textarea name="destinations" rows="3" required></textarea>
+            </label>
+            <label>
+              <span>Boleteria</span>
+              <input name="ticketOffice" required>
+            </label>
+          </div>
+          <div class="form-cluster company-services-editor">
+            <div class="cluster-heading">
+              <span>02</span>
+              <strong>Destinos y horarios que verá el pasajero</strong>
+            </div>
+            <p class="editor-note" data-company-services-note></p>
+            <div class="company-service-list" data-company-service-list></div>
+            <button class="outline-button full-button" type="button" data-add-company-service>Agregar destino u horario</button>
+          </div>
           <div class="form-actions">
             <button class="primary-button" type="submit">Guardar empresa</button>
             <button class="danger-button" type="button" data-delete-company>Eliminar</button>
@@ -224,7 +243,7 @@
         <div class="panel list-panel">
           <div class="panel-heading">
             <div>
-              <p class="eyebrow">Horarios</p>
+              <p class="eyebrow">Edicion avanzada</p>
               <h2>Servicios por empresa</h2>
             </div>
             <div class="service-toolbar">
@@ -232,7 +251,8 @@
               <select data-service-filter aria-label="Filtrar servicios por empresa"></select>
             </div>
           </div>
-          <p class="panel-helper" data-service-summary></p>
+          <p class="panel-helper">Uso recomendado: modifica destinos y horarios desde la ficha de cada empresa. Esta vista queda como respaldo avanzado.</p>
+          <p class="panel-helper compact-helper" data-service-summary></p>
           <div class="service-list" data-service-list></div>
         </div>
 
@@ -240,7 +260,7 @@
           <input type="hidden" name="editingId">
           <div class="panel-heading">
             <div>
-              <p class="eyebrow">Servicio</p>
+              <p class="eyebrow">Avanzado</p>
               <h2 data-service-form-title>Agregar horario</h2>
             </div>
           </div>

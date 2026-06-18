@@ -572,6 +572,106 @@ function renderCompanyForm() {
   form.elements.destinations.value = company.destinations || "";
   form.elements.ticketOffice.value = company.ticketOffice || "";
   $("[data-company-form-title]").textContent = company.name || "Nueva empresa";
+  renderCompanyUnifiedEditor(company);
+}
+
+function renderCompanyUnifiedEditor(company) {
+  const hero = $("[data-company-editor-hero]");
+  const list = $("[data-company-service-list]");
+  const note = $("[data-company-services-note]");
+  const services = getCompanyServices(company.name);
+  const isRural = isRuralGroupName(company.name);
+
+  hero.innerHTML = `
+    <div class="company-editor-logo">
+      ${company.logoImage ? `<img src="${escapeHtml(company.logoImage)}" alt="${escapeHtml(company.name)}">` : `<span>${escapeHtml(company.logo || company.name)}</span>`}
+    </div>
+    <div>
+      <span>${isRural ? "Grupo protegido" : "Empresa seleccionada"}</span>
+      <strong>${escapeHtml(company.name)}</strong>
+      <p>${services.length} destino${services.length === 1 ? "" : "s"} configurado${services.length === 1 ? "" : "s"} para la web.</p>
+    </div>
+  `;
+
+  note.textContent = isRural
+    ? "Servicios Rurales funciona como una sola tarjeta. Edita aqui solo destino y horario/frecuencia."
+    : "Cada destino que edites aqui actualiza la informacion que aparece al consultar esta empresa en la web.";
+
+  if (!services.length) {
+    list.innerHTML = `<p class="empty-state">Esta empresa aun no tiene destinos. Agrega uno para que aparezca en la consulta publica.</p>`;
+    return;
+  }
+
+  list.innerHTML = services.map((service, index) => renderCompanyServiceEditor(service, index, isRural)).join("");
+}
+
+function renderCompanyServiceEditor(service, index, isRural) {
+  return `
+    <article class="company-service-editor" data-company-service-id="${escapeHtml(service.id)}">
+      <div class="company-service-index">${String(index + 1).padStart(2, "0")}</div>
+      <div class="company-service-fields">
+        <label>
+          <span>Destino visible</span>
+          <input data-route-field="destination" value="${escapeHtml(service.destination)}" required>
+        </label>
+        <label>
+          <span>Horario o frecuencia</span>
+          <textarea data-route-field="time" rows="2" required>${escapeHtml(service.time)}</textarea>
+        </label>
+        ${isRural ? "" : `
+          <label>
+            <span>Servicio visible</span>
+            <input data-route-field="service" value="${escapeHtml(service.service || "")}" placeholder="Ej: Ventas de pasajes">
+          </label>
+        `}
+      </div>
+      <div class="company-service-actions">
+        <button class="small-button" type="button" data-save-company-service>Guardar ruta</button>
+        <button class="danger-button" type="button" data-delete-company-service>Eliminar</button>
+      </div>
+    </article>
+  `;
+}
+
+function getCompanyServices(companyName) {
+  const key = normalizedKey(canonicalCompanyName(companyName));
+  return data.services.filter((service) => normalizedKey(service.company) === key);
+}
+
+function getCompanyByName(companyName) {
+  const key = normalizedKey(canonicalCompanyName(companyName));
+  return data.companies.find((company) => normalizedKey(company.name) === key);
+}
+
+function formatTicketOfficeLabel(companyName, ticketOffice) {
+  if (isRuralGroupName(companyName)) return "Consultar en terminal";
+  const clean = String(ticketOffice || "").trim();
+  if (!clean || normalizedKey(clean) === "consultar") return "Consultar en terminal";
+  return /^boleter/i.test(clean) ? clean : `Boletería ${clean}`;
+}
+
+function getDefaultServiceForCompany(companyName) {
+  if (isRuralGroupName(companyName)) return "Zona rural";
+  return getCompanyServices(companyName)[0]?.service || "Ventas de pasajes";
+}
+
+function syncCompanyDestinationsFromServices(companyName) {
+  const company = getCompanyByName(companyName);
+  if (!company) return;
+  const destinations = Array.from(new Set(getCompanyServices(company.name).map((service) => service.destination.trim()).filter(Boolean)));
+  company.destinations = destinations.length ? destinations.join(", ") : "Sin destinos configurados";
+}
+
+function syncCompanyServicesMeta(companyName) {
+  const company = getCompanyByName(companyName);
+  if (!company) return;
+  data.services.forEach((service) => {
+    if (normalizedKey(service.company) !== normalizedKey(company.name)) return;
+    service.company = company.name;
+    service.availability = formatTicketOfficeLabel(company.name, company.ticketOffice);
+    if (isRuralGroupName(company.name)) service.service = "Zona rural";
+    if (!service.service) service.service = getDefaultServiceForCompany(company.name);
+  });
 }
 
 function renderServiceOptions() {
@@ -829,48 +929,132 @@ function renderReportPreview() {
   `;
 }
 
+function persistCompanyFromForm(form) {
+  const index = Number(form.elements.index.value);
+  const oldName = data.companies[index]?.name || "";
+  const wasRural = isRuralGroupName(oldName) || isLegacyRuralOperator(oldName);
+  let company = Object.fromEntries(new FormData(form).entries());
+  company.name = canonicalCompanyName(company.name);
+
+  if (wasRural || isRuralGroupName(company.name)) {
+    company = {
+      ...RURAL_COMPANY,
+      ...company,
+      name: RURAL_GROUP_NAME,
+      logoImage: company.logoImage || RURAL_COMPANY.logoImage
+    };
+  }
+
+  const duplicateIndex = findCompanyIndexByName(company.name, index);
+  if (duplicateIndex >= 0) {
+    data.companies[duplicateIndex] = mergeCompany(data.companies[duplicateIndex], company);
+    data.companies.splice(index, 1);
+    activeCompanyIndex = duplicateIndex > index ? duplicateIndex - 1 : duplicateIndex;
+  } else {
+    data.companies[index] = company;
+    activeCompanyIndex = index;
+  }
+
+  if (oldName && normalizedKey(oldName) !== normalizedKey(company.name)) {
+    data.services.forEach((service) => {
+      if (normalizedKey(service.company) === normalizedKey(oldName)) service.company = company.name;
+    });
+  }
+
+  const savedCompany = data.companies[activeCompanyIndex] || company;
+  syncCompanyDestinationsFromServices(savedCompany.name);
+  syncCompanyServicesMeta(savedCompany.name);
+  activeServiceFilter = savedCompany.name;
+  return savedCompany;
+}
+
+function readRouteEditor(row, company) {
+  const destination = $("[data-route-field='destination']", row)?.value.trim() || "";
+  const time = $("[data-route-field='time']", row)?.value.trim() || "";
+  const service = $("[data-route-field='service']", row)?.value.trim() || getDefaultServiceForCompany(company.name);
+  if (!destination || !time) return null;
+
+  return {
+    id: row.dataset.companyServiceId || "",
+    destination,
+    time,
+    company: company.name,
+    service: isRuralGroupName(company.name) ? "Zona rural" : service,
+    price: null,
+    availability: formatTicketOfficeLabel(company.name, company.ticketOffice)
+  };
+}
+
 function bindEvents() {
   $("[data-company-list]").addEventListener("click", (event) => {
     const button = event.target.closest("[data-company-index]");
     if (!button) return;
     activeCompanyIndex = Number(button.dataset.companyIndex);
+    activeServiceFilter = data.companies[activeCompanyIndex]?.name || "";
+    activeServiceId = "";
     renderAll();
   });
 
   $("[data-company-form]").addEventListener("submit", (event) => {
     event.preventDefault();
-    const form = event.currentTarget;
-    const index = Number(form.elements.index.value);
-    const oldName = data.companies[index]?.name || "";
-    const wasRural = isRuralGroupName(oldName) || isLegacyRuralOperator(oldName);
-    let company = Object.fromEntries(new FormData(form).entries());
-    company.name = canonicalCompanyName(company.name);
-
-    if (wasRural || isRuralGroupName(company.name)) {
-      company = {
-        ...RURAL_COMPANY,
-        ...company,
-        name: RURAL_GROUP_NAME,
-        logoImage: company.logoImage || RURAL_COMPANY.logoImage
-      };
-    }
-
-    const duplicateIndex = findCompanyIndexByName(company.name, index);
-    if (duplicateIndex >= 0) {
-      data.companies[duplicateIndex] = mergeCompany(data.companies[duplicateIndex], company);
-      data.companies.splice(index, 1);
-      activeCompanyIndex = duplicateIndex > index ? duplicateIndex - 1 : duplicateIndex;
-    } else {
-      data.companies[index] = company;
-      activeCompanyIndex = index;
-    }
-
-    if (oldName && oldName !== company.name) {
-      data.services.forEach((service) => {
-        if (normalizedKey(service.company) === normalizedKey(oldName)) service.company = company.name;
-      });
-    }
+    persistCompanyFromForm(event.currentTarget);
     saveData("Empresa guardada.");
+  });
+
+  $("[data-company-form]").addEventListener("click", (event) => {
+    const addButton = event.target.closest("[data-add-company-service]");
+    const saveButton = event.target.closest("[data-save-company-service]");
+    const deleteButton = event.target.closest("[data-delete-company-service]");
+    if (!addButton && !saveButton && !deleteButton) return;
+
+    const form = event.currentTarget;
+    const company = persistCompanyFromForm(form);
+
+    if (addButton) {
+      const service = {
+        id: createServiceId({ company: company.name, destination: "Nuevo destino" }),
+        destination: "Nuevo destino",
+        time: isRuralGroupName(company.name) ? "Indicar horario o frecuencia" : "Consultar en boletería",
+        company: company.name,
+        service: getDefaultServiceForCompany(company.name),
+        price: null,
+        availability: formatTicketOfficeLabel(company.name, company.ticketOffice)
+      };
+      data.services.push(service);
+      activeServiceId = service.id;
+      syncCompanyDestinationsFromServices(company.name);
+      saveData("Destino agregado a la empresa.");
+      return;
+    }
+
+    const row = event.target.closest("[data-company-service-id]");
+    if (!row) return;
+
+    if (deleteButton) {
+      const service = data.services.find((item) => item.id === row.dataset.companyServiceId);
+      if (!service || !confirm(`¿Eliminar el destino ${service.destination}?`)) return;
+      data.services = data.services.filter((item) => item.id !== service.id);
+      activeServiceId = "";
+      syncCompanyDestinationsFromServices(company.name);
+      saveData("Destino eliminado.");
+      return;
+    }
+
+    const route = readRouteEditor(row, company);
+    if (!route) {
+      showToast("Completa destino y horario/frecuencia.");
+      return;
+    }
+    route.id = route.id || createServiceId(route);
+    const existingIndex = data.services.findIndex((item) => item.id === route.id);
+    if (existingIndex >= 0) {
+      data.services[existingIndex] = route;
+    } else {
+      data.services.push(route);
+    }
+    activeServiceId = route.id;
+    syncCompanyDestinationsFromServices(company.name);
+    saveData("Destino y horario guardados.");
   });
 
   $("[data-add-company]").addEventListener("click", () => {
@@ -940,6 +1124,8 @@ function bindEvents() {
       data.services.push(service);
     }
     activeServiceId = service.id;
+    syncCompanyDestinationsFromServices(service.company);
+    syncCompanyServicesMeta(service.company);
     saveData("Servicio guardado.");
   });
 
@@ -959,6 +1145,7 @@ function bindEvents() {
     if (!service || !confirm(`¿Eliminar el servicio a ${service.destination}?`)) return;
     data.services = data.services.filter((item) => item.id !== activeServiceId);
     activeServiceId = "";
+    syncCompanyDestinationsFromServices(service.company);
     saveData("Servicio eliminado.");
   });
 
