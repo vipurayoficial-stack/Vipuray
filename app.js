@@ -476,7 +476,7 @@ function groupServicesByDestination(companyServices) {
 
   return Array.from(groups.values()).map((group) => ({
     destination: group.destination,
-    times: Array.from(group.times).join(" / "),
+    times: Array.from(group.times).join("\n"),
     services: Array.from(group.services).join(", "),
     availability: Array.from(group.availability).join(", ")
   }));

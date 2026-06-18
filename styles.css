@@ -1375,8 +1375,10 @@ h2 {
 
 .service-item span {
   color: var(--ink);
+  display: block;
   font-weight: 750;
   line-height: 1.35;
+  white-space: pre-line;
 }
 
 .service-item em {
