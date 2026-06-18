@@ -635,6 +635,28 @@ p {
   margin-bottom: 20px;
 }
 
+.service-toolbar {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+
+.service-toolbar select {
+  min-width: 210px;
+}
+
+.panel-helper {
+  background: linear-gradient(135deg, rgba(0, 119, 217, 0.08), rgba(24, 168, 224, 0.08));
+  border: 1px solid rgba(0, 119, 217, 0.12);
+  border-radius: 12px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.45;
+  margin: -4px 0 14px;
+  padding: 10px 12px;
+}
+
 .company-list,
 .service-list,
 .slide-list {
@@ -709,6 +731,26 @@ label span {
   color: var(--muted);
   font-size: 13px;
   font-weight: 900;
+}
+
+label small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.editor-note {
+  background:
+    linear-gradient(135deg, rgba(47, 168, 79, 0.12), rgba(24, 168, 224, 0.1));
+  border: 1px solid rgba(47, 168, 79, 0.22);
+  border-radius: 14px;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 850;
+  line-height: 1.45;
+  margin: 0 0 14px;
+  padding: 12px 14px;
 }
 
 input,
@@ -1269,6 +1311,17 @@ textarea:focus {
 
   .analytics-card {
     min-height: auto;
+  }
+
+  .service-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .service-toolbar select,
+  .service-toolbar .small-button {
+    width: 100%;
   }
 
   .analytics-chart {

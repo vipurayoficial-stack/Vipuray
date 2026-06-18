@@ -11,7 +11,7 @@ const defaultData = {
     { name: "Buses Oro Verde", logo: "Oro Verde", logoImage: "assets/company-logos/buses-oro-verde.png", destinations: "Santiago", ticketOffice: "N° 7" },
     { name: "Buses Lista Azul", logo: "Lista Azul", logoImage: "assets/company-logos/buses-lista-azul.png", destinations: "Santiago", ticketOffice: "N° 8" },
     { name: "Buses Barahona", logo: "Barahona", logoImage: "assets/company-logos/buses-barahona.png", destinations: "Pitrufquén, Temuco", ticketOffice: "Consultar" },
-    { name: "Servicios rurales", logo: "Rural", logoImage: "assets/company-logos/servicios-rurales.png", destinations: "El Coihue, Milleuco, Chaura, Voipir Seco, Huincacara, Relún, Challupén, Malloco Lolenco, Huilipilun Alto, Puente Long Long, Catrico, Rayen Lafquen y más", ticketOffice: "Consultar" }
+    { name: "Servicios Rurales", logo: "Rural", logoImage: "assets/company-logos/servicios-rurales.png", destinations: "El Coihue, Milleuco, Chaura, Voipir Seco, Huincacara, Relún, Challupén, Malloco Lolenco, Huilipilun Alto, Puente Long Long, Catrico, Rayen Lafquen y más", ticketOffice: "Consultar" }
   ],
   services: [
     { id: "VIP-PUC", destination: "Pucón", time: "Consultar en boletería", company: "Buses Vipu Ray", service: "Ventas de pasajes", price: null, availability: "Boletería N° 2" },
@@ -26,24 +26,24 @@ const defaultData = {
     { id: "LIS-SAN", destination: "Santiago", time: "Consultar en boletería", company: "Buses Lista Azul", service: "Ventas de pasajes", price: null, availability: "Boletería N° 8" },
     { id: "BAR-PIT", destination: "Pitrufquén", time: "Consultar horarios", company: "Buses Barahona", service: "Consultar en terminal", price: null, availability: "Consultar en terminal" },
     { id: "BAR-TEM", destination: "Temuco", time: "Consultar horarios", company: "Buses Barahona", service: "Consultar en terminal", price: null, availability: "Consultar en terminal" },
-    { id: "ARM-COI-1300", destination: "El Coihue", time: "Lunes a viernes 13:00 y 19:00 / sábado 13:00", company: "Servicios rurales", operator: "Buses Manuel Armona", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "ARM-MIL-1600", destination: "Milleuco", time: "Lunes a viernes 16:00", company: "Servicios rurales", operator: "Buses Manuel Armona", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "ARM-CHA", destination: "Chaura", time: "Lunes a viernes 12:00 y 17:00", company: "Servicios rurales", operator: "Buses Manuel Armona", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "LEO-VOI", destination: "Voipir Seco", time: "Lunes a viernes 13:00 / lunes a sábado 17:00", company: "Servicios rurales", operator: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "LEO-HUI", destination: "Huincacara", time: "Lunes a viernes 13:00 / lunes a sábado 17:00", company: "Servicios rurales", operator: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "LEO-REL", destination: "Relún", time: "Lunes, miércoles y viernes 13:00 y 17:00", company: "Servicios rurales", operator: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "LEO-CHA", destination: "Challupén", time: "Lunes a viernes 16:00", company: "Servicios rurales", operator: "Buses Leonardo del Valle", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "ESP-MAL", destination: "Malloco Lolenco", time: "Lunes a viernes 16:30", company: "Servicios rurales", operator: "Transportes Esperanza (Surtran)", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "ESP-HUI", destination: "Huilipilun Alto", time: "Consultar en terminal", company: "Servicios rurales", operator: "Transportes Esperanza (Surtran)", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "ESP-LON", destination: "Puente Long Long", time: "18:00", company: "Servicios rurales", operator: "Transportes Esperanza (Surtran)", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "EDET-CAT", destination: "Catrico", time: "Lunes a viernes 16:00", company: "Servicios rurales", operator: "Buses E.De.T. De Eoca Bus Limitada", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "EDET-RAY", destination: "Rayen Lafquen", time: "Lunes a viernes 16:00", company: "Servicios rurales", operator: "Buses E.De.T. De Eoca Bus Limitada", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "CAS-COP", destination: "Los Copihues", time: "Lunes, miércoles y viernes 13:00 / lunes a viernes 18:30", company: "Servicios rurales", operator: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "CAS-RAL", destination: "Rallenlafquen", time: "Lunes a viernes 16:30", company: "Servicios rurales", operator: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "CAS-FUN", destination: "Funalhue", time: "Lunes a viernes 18:30 / lunes a sábado 13:00", company: "Servicios rurales", operator: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "CAS-CPE", destination: "Copihuelpe", time: "Lunes a sábado 13:00 y 17:00", company: "Servicios rurales", operator: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "CAS-PIN", destination: "Pinohuacho", time: "Lunes a viernes 16:30", company: "Servicios rurales", operator: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" },
-    { id: "CAS-LAU", destination: "Los Laureles", time: "Martes y jueves 16:00", company: "Servicios rurales", operator: "Buses José Castillo", service: "Zona rural", price: null, availability: "Consultar en terminal" }
+    { id: "ARM-COI-1300", destination: "El Coihue", time: "Lunes a viernes 13:00 y 19:00 / sábado 13:00", company: "Servicios Rurales", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "ARM-MIL-1600", destination: "Milleuco", time: "Lunes a viernes 16:00", company: "Servicios Rurales", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "ARM-CHA", destination: "Chaura", time: "Lunes a viernes 12:00 y 17:00", company: "Servicios Rurales", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "LEO-VOI", destination: "Voipir Seco", time: "Lunes a viernes 13:00 / lunes a sábado 17:00", company: "Servicios Rurales", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "LEO-HUI", destination: "Huincacara", time: "Lunes a viernes 13:00 / lunes a sábado 17:00", company: "Servicios Rurales", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "LEO-REL", destination: "Relún", time: "Lunes, miércoles y viernes 13:00 y 17:00", company: "Servicios Rurales", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "LEO-CHA", destination: "Challupén", time: "Lunes a viernes 16:00", company: "Servicios Rurales", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "ESP-MAL", destination: "Malloco Lolenco", time: "Lunes a viernes 16:30", company: "Servicios Rurales", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "ESP-HUI", destination: "Huilipilun Alto", time: "Consultar en terminal", company: "Servicios Rurales", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "ESP-LON", destination: "Puente Long Long", time: "18:00", company: "Servicios Rurales", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "EDET-CAT", destination: "Catrico", time: "Lunes a viernes 16:00", company: "Servicios Rurales", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "EDET-RAY", destination: "Rayen Lafquen", time: "Lunes a viernes 16:00", company: "Servicios Rurales", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "CAS-COP", destination: "Los Copihues", time: "Lunes, miércoles y viernes 13:00 / lunes a viernes 18:30", company: "Servicios Rurales", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "CAS-RAL", destination: "Rallenlafquen", time: "Lunes a viernes 16:30", company: "Servicios Rurales", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "CAS-FUN", destination: "Funalhue", time: "Lunes a viernes 18:30 / lunes a sábado 13:00", company: "Servicios Rurales", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "CAS-CPE", destination: "Copihuelpe", time: "Lunes a sábado 13:00 y 17:00", company: "Servicios Rurales", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "CAS-PIN", destination: "Pinohuacho", time: "Lunes a viernes 16:30", company: "Servicios Rurales", service: "Zona rural", price: null, availability: "Consultar en terminal" },
+    { id: "CAS-LAU", destination: "Los Laureles", time: "Martes y jueves 16:00", company: "Servicios Rurales", service: "Zona rural", price: null, availability: "Consultar en terminal" }
   ],
   infoSlides: [
     {
@@ -123,24 +123,10 @@ const defaultData = {
     }
   ]
 };
-
-let data = loadData();
-let activeCompanyIndex = 0;
-let activeSlideIndex = 0;
-let activeServiceId = "";
-let activeServiceFilter = "";
-let activeReportId = data.reports?.[0]?.id || "";
-let analyticsState = {
-  loading: false,
-  source: "local",
-  range: getDefaultDateRange(),
-  data: emptyAnalyticsData(),
-  error: ""
-};
-
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
-const RURAL_GROUP_NAME = "Servicios rurales";
+const RURAL_GROUP_NAME = "Servicios Rurales";
+const LEGACY_RURAL_GROUP_NAME = "Servicios rurales";
 const RURAL_COMPANY_NAMES = new Set([
   "Buses Manuel Armona",
   "Buses Leonardo del Valle",
@@ -156,8 +142,81 @@ const RURAL_COMPANY = {
   ticketOffice: "Consultar"
 };
 
+let activeCompanyIndex = 0;
+let activeSlideIndex = 0;
+let activeServiceId = "";
+let activeServiceFilter = "";
+let data = loadData();
+let activeReportId = data.reports?.[0]?.id || "";
+let analyticsState = {
+  loading: false,
+  source: "local",
+  range: getDefaultDateRange(),
+  data: emptyAnalyticsData(),
+  error: ""
+};
+
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
+}
+
+function normalizedKey(value = "") {
+  return String(value)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .replace(/\s+/g, " ")
+    .toLowerCase();
+}
+
+function isRuralGroupName(value) {
+  return [RURAL_GROUP_NAME, LEGACY_RURAL_GROUP_NAME].some((name) => normalizedKey(name) === normalizedKey(value));
+}
+
+function isLegacyRuralOperator(value) {
+  const key = normalizedKey(value);
+  return Array.from(RURAL_COMPANY_NAMES).some((name) => normalizedKey(name) === key);
+}
+
+function canonicalCompanyName(value = "") {
+  if (isRuralGroupName(value) || isLegacyRuralOperator(value)) return RURAL_GROUP_NAME;
+  return String(value).trim().replace(/\s+/g, " ");
+}
+
+function findCompanyIndexByName(name, excludeIndex = -1) {
+  const key = normalizedKey(name);
+  return data.companies.findIndex((company, index) => index !== excludeIndex && normalizedKey(company.name) === key);
+}
+
+function mergeCompany(existing, incoming) {
+  return {
+    ...existing,
+    ...incoming,
+    logo: incoming.logo || existing.logo,
+    logoImage: incoming.logoImage || existing.logoImage,
+    destinations: incoming.destinations || existing.destinations,
+    ticketOffice: incoming.ticketOffice || existing.ticketOffice
+  };
+}
+
+function normalizeDataSet(value) {
+  const normalized = {
+    ...value,
+    companies: normalizeCompanies(Array.isArray(value.companies) ? value.companies : []),
+    services: normalizeServices(Array.isArray(value.services) ? value.services : []),
+    infoSlides: Array.isArray(value.infoSlides) ? value.infoSlides : clone(defaultData.infoSlides),
+    reports: Array.isArray(value.reports) ? value.reports : clone(defaultData.reports)
+  };
+
+  if (activeCompanyIndex >= normalized.companies.length) activeCompanyIndex = Math.max(0, normalized.companies.length - 1);
+  if (activeServiceFilter && !normalized.companies.some((company) => company.name === activeServiceFilter)) {
+    activeServiceFilter = "";
+  }
+  if (activeServiceId && !normalized.services.some((service) => service.id === activeServiceId)) {
+    activeServiceId = "";
+  }
+
+  return normalized;
 }
 
 function loadData() {
@@ -165,43 +224,56 @@ function loadData() {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
     if (saved && Array.isArray(saved.companies) && Array.isArray(saved.services) && Array.isArray(saved.infoSlides)) {
       if (!Array.isArray(saved.reports)) saved.reports = clone(defaultData.reports);
-      saved.companies = normalizeCompanies(saved.companies);
-      saved.services = normalizeServices(saved.services);
-      return saved;
+      return normalizeDataSet(saved);
     }
   } catch (error) {
     console.warn("No se pudieron cargar los datos guardados.", error);
   }
-  return clone(defaultData);
+  return normalizeDataSet(clone(defaultData));
 }
 
 function normalizeCompanies(items) {
-  const visibleCompanies = items
-    .filter((company) => !RURAL_COMPANY_NAMES.has(company.name))
-    .map((company) => {
-      if (company.name !== RURAL_GROUP_NAME) return company;
-      return {
-        ...RURAL_COMPANY,
-        ...company,
-        logoImage: company.logoImage || RURAL_COMPANY.logoImage
-      };
-    });
-  const hasRuralGroup = visibleCompanies.some((company) => company.name === RURAL_GROUP_NAME);
-  return hasRuralGroup ? visibleCompanies : [...visibleCompanies, { ...RURAL_COMPANY }];
+  const byName = new Map();
+
+  items.forEach((company) => {
+    if (!company?.name || isLegacyRuralOperator(company.name)) return;
+    const normalizedCompany = isRuralGroupName(company.name)
+      ? {
+          ...RURAL_COMPANY,
+          ...company,
+          name: RURAL_GROUP_NAME,
+          logoImage: company.logoImage || RURAL_COMPANY.logoImage
+        }
+      : {
+          ...company,
+          name: String(company.name).trim().replace(/\s+/g, " ")
+        };
+    const key = normalizedKey(normalizedCompany.name);
+    byName.set(key, byName.has(key) ? mergeCompany(byName.get(key), normalizedCompany) : normalizedCompany);
+  });
+
+  if (!byName.has(normalizedKey(RURAL_GROUP_NAME))) {
+    byName.set(normalizedKey(RURAL_GROUP_NAME), { ...RURAL_COMPANY });
+  }
+
+  return Array.from(byName.values());
 }
 
 function normalizeServices(items) {
   return items.map((service) => {
-    if (!RURAL_COMPANY_NAMES.has(service.company)) return service;
-    return {
-      ...service,
-      company: RURAL_GROUP_NAME,
-      operator: service.operator || service.company
-    };
+    const company = canonicalCompanyName(service.company);
+    const normalized = { ...service, company };
+    delete normalized.operator;
+    if (company === RURAL_GROUP_NAME) {
+      normalized.service = "Zona rural";
+      normalized.availability = "Consultar en terminal";
+    }
+    return normalized;
   });
 }
 
 function saveData(message = "Cambios guardados.") {
+  data = normalizeDataSet(data);
   data.updatedAt = new Date().toISOString();
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   renderAll();
@@ -515,6 +587,14 @@ function renderServices() {
   const filterValue = activeServiceFilter;
   const services = filterValue ? data.services.filter((service) => service.company === filterValue) : data.services;
   const list = $("[data-service-list]");
+  const summary = $("[data-service-summary]");
+
+  if (summary) {
+    const ruralCount = services.filter((service) => service.company === RURAL_GROUP_NAME).length;
+    summary.textContent = filterValue
+      ? `${services.length} servicios visibles para ${filterValue}.`
+      : `${services.length} servicios cargados. ${ruralCount} corresponden a Servicios Rurales.`;
+  }
 
   list.innerHTML = services.map((service) => `
     <button class="service-row${service.id === activeServiceId ? " is-active" : ""}" type="button" data-service-id="${service.id}">
@@ -535,7 +615,21 @@ function renderServiceForm() {
   form.elements.time.value = service?.time || "";
   form.elements.service.value = service?.service || "";
   form.elements.availability.value = service?.availability || "";
+  updateServiceFormMode();
   $("[data-service-form-title]").textContent = service ? "Editar horario" : "Agregar horario";
+}
+
+function updateServiceFormMode() {
+  const form = $("[data-service-form]");
+  const note = $("[data-rural-service-note]", form);
+  const isRural = isRuralGroupName(form.elements.company.value);
+  if (note) note.hidden = !isRural;
+  $$("[data-service-meta-field]", form).forEach((field) => {
+    field.hidden = isRural;
+    $$("input, select, textarea", field).forEach((input) => {
+      input.disabled = isRural;
+    });
+  });
 }
 
 function renderSlides() {
@@ -747,12 +841,33 @@ function bindEvents() {
     event.preventDefault();
     const form = event.currentTarget;
     const index = Number(form.elements.index.value);
-    const oldName = data.companies[index]?.name;
-    const company = Object.fromEntries(new FormData(form).entries());
-    data.companies[index] = company;
+    const oldName = data.companies[index]?.name || "";
+    const wasRural = isRuralGroupName(oldName) || isLegacyRuralOperator(oldName);
+    let company = Object.fromEntries(new FormData(form).entries());
+    company.name = canonicalCompanyName(company.name);
+
+    if (wasRural || isRuralGroupName(company.name)) {
+      company = {
+        ...RURAL_COMPANY,
+        ...company,
+        name: RURAL_GROUP_NAME,
+        logoImage: company.logoImage || RURAL_COMPANY.logoImage
+      };
+    }
+
+    const duplicateIndex = findCompanyIndexByName(company.name, index);
+    if (duplicateIndex >= 0) {
+      data.companies[duplicateIndex] = mergeCompany(data.companies[duplicateIndex], company);
+      data.companies.splice(index, 1);
+      activeCompanyIndex = duplicateIndex > index ? duplicateIndex - 1 : duplicateIndex;
+    } else {
+      data.companies[index] = company;
+      activeCompanyIndex = index;
+    }
+
     if (oldName && oldName !== company.name) {
       data.services.forEach((service) => {
-        if (service.company === oldName) service.company = company.name;
+        if (normalizedKey(service.company) === normalizedKey(oldName)) service.company = company.name;
       });
     }
     saveData("Empresa guardada.");
@@ -772,6 +887,10 @@ function bindEvents() {
 
   $("[data-delete-company]").addEventListener("click", () => {
     const company = data.companies[activeCompanyIndex];
+    if (company && isRuralGroupName(company.name)) {
+      showToast("Servicios Rurales es un grupo protegido. Puedes editar sus destinos y horarios.");
+      return;
+    }
     if (!company || !confirm(`¿Eliminar ${company.name}? Tambien se eliminaran sus servicios.`)) return;
     data.services = data.services.filter((service) => service.company !== company.name);
     data.companies.splice(activeCompanyIndex, 1);
@@ -782,6 +901,12 @@ function bindEvents() {
 
   $("[data-service-filter]").addEventListener("change", () => {
     activeServiceFilter = $("[data-service-filter]").value;
+    activeServiceId = "";
+    renderAll();
+  });
+
+  $("[data-show-rural-services]").addEventListener("click", () => {
+    activeServiceFilter = RURAL_GROUP_NAME;
     activeServiceId = "";
     renderAll();
   });
@@ -800,6 +925,12 @@ function bindEvents() {
     const editingId = service.editingId;
     delete service.editingId;
     service.price = null;
+    service.company = canonicalCompanyName(service.company);
+    if (service.company === RURAL_GROUP_NAME) {
+      service.service = "Zona rural";
+      service.availability = "Consultar en terminal";
+    }
+    delete service.operator;
     service.id = editingId || createServiceId(service);
 
     const existingIndex = data.services.findIndex((item) => item.id === editingId);
@@ -816,6 +947,8 @@ function bindEvents() {
     activeServiceId = "";
     renderServiceForm();
   });
+
+  $("[data-service-form]").elements.company.addEventListener("change", updateServiceFormMode);
 
   $("[data-delete-service]").addEventListener("click", () => {
     if (!activeServiceId) {
@@ -962,10 +1095,11 @@ function exportData() {
 function resetData() {
   if (!confirm("¿Restaurar los datos base? Se perderan los cambios locales.")) return;
   localStorage.removeItem(STORAGE_KEY);
-  data = clone(defaultData);
+  data = normalizeDataSet(clone(defaultData));
   activeCompanyIndex = 0;
   activeSlideIndex = 0;
   activeServiceId = "";
+  activeServiceFilter = "";
   renderAll();
   showToast("Datos restaurados.");
 }

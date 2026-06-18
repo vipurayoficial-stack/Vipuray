@@ -227,8 +227,12 @@
               <p class="eyebrow">Horarios</p>
               <h2>Servicios por empresa</h2>
             </div>
-            <select data-service-filter aria-label="Filtrar servicios por empresa"></select>
+            <div class="service-toolbar">
+              <button class="small-button" type="button" data-show-rural-services>Ver rurales</button>
+              <select data-service-filter aria-label="Filtrar servicios por empresa"></select>
+            </div>
           </div>
+          <p class="panel-helper" data-service-summary></p>
           <div class="service-list" data-service-list></div>
         </div>
 
@@ -244,6 +248,9 @@
             <span>Empresa</span>
             <select name="company" required></select>
           </label>
+          <p class="editor-note" data-rural-service-note hidden>
+            Servicios Rurales se edita como un solo grupo: completa solo destino y horario/frecuencia.
+          </p>
           <label>
             <span>Destino</span>
             <input name="destination" required>
@@ -252,11 +259,11 @@
             <span>Horario o frecuencia</span>
             <textarea name="time" rows="3" required></textarea>
           </label>
-          <label>
+          <label data-service-meta-field>
             <span>Tipo de servicio</span>
             <input name="service" required>
           </label>
-          <label>
+          <label data-service-meta-field>
             <span>Boleteria / atencion</span>
             <input name="availability" required>
           </label>
