@@ -1315,16 +1315,6 @@ h2 {
   transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s var(--ease-out);
 }
 
-.service-item::before {
-  background: linear-gradient(90deg, rgba(177, 204, 231, 0.72), rgba(0, 180, 210, 0.75));
-  content: "";
-  height: 2px;
-  left: min(39%, 360px);
-  position: absolute;
-  right: 47%;
-  top: 50%;
-}
-
 .service-item:hover {
   border-color: rgba(0, 119, 217, 0.28);
   box-shadow: 0 18px 38px rgba(7, 27, 59, 0.08);
@@ -2571,10 +2561,6 @@ tr:last-child td {
 
   .service-item {
     grid-template-columns: 1fr;
-  }
-
-  .service-item::before {
-    display: none;
   }
 
   .service-list-header {
