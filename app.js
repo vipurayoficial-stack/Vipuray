@@ -443,7 +443,7 @@ function renderInitialResults() {
   results.innerHTML = `
     <article class="result-card route-summary-card">
       <div class="route-title">Selecciona una empresa para consultar</div>
-      <p class="result-details">Elige una empresa en el buscador para ver sus destinos, horarios informados, servicios y boletería.</p>
+      <p class="result-details">Elige una empresa en el buscador para ver su información.</p>
     </article>
   `;
   prepareRevealElements($$(".result-card", results));
