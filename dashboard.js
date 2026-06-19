@@ -8,7 +8,7 @@ const defaultData = {
     { name: "Buses Villarrica", logo: "Villarrica", logoImage: "assets/company-logos/buses-villarrica.png", destinations: "Temuco", ticketOffice: "N° 4" },
     { name: "Buses Transantin", logo: "Transantin", logoImage: "assets/company-logos/buses-transantin.png", destinations: "Santiago", ticketOffice: "N° 5" },
     { name: "Buses Pullman Tur", logo: "Pullman Tur", logoImage: "assets/company-logos/buses-pullman-tur.png", destinations: "Santiago", ticketOffice: "N° 6" },
-    { name: "Buses Oro Verde", logo: "Oro Verde", logoImage: "assets/company-logos/buses-oro-verde.png", destinations: "Santiago", ticketOffice: "N° 7" },
+    { name: "Buses Liquiñe Oro Verde", logo: "Liquiñe Oro Verde", logoImage: "assets/company-logos/buses-liquine-oro-verde.png", destinations: "Santiago", ticketOffice: "N° 7" },
     { name: "Buses Lista Azul", logo: "Lista Azul", logoImage: "assets/company-logos/buses-lista-azul.png", destinations: "Santiago", ticketOffice: "N° 8" },
     { name: "Buses Barahona", logo: "Barahona", logoImage: "assets/company-logos/buses-barahona.png", destinations: "Pitrufquén, Temuco", ticketOffice: "Consultar" },
     { name: "Servicios Rurales", logo: "Rural", logoImage: "assets/company-logos/servicios-rurales.png", destinations: "El Coihue, Milleuco, Chaura, Voipir Seco, Huincacara, Relún, Challupén, Malloco Lolenco, Huilipilun Alto, Puente Long Long, Catrico, Rayen Lafquen y más", ticketOffice: "Consultar" }
@@ -22,7 +22,7 @@ const defaultData = {
     { id: "VIL-TEM", destination: "Temuco", time: "Consultar en boletería", company: "Buses Villarrica", service: "Ventas de pasajes", price: null, availability: "Boletería N° 4" },
     { id: "TRA-SAN", destination: "Santiago", time: "Consultar en boletería", company: "Buses Transantin", service: "Ventas de pasajes", price: null, availability: "Boletería N° 5" },
     { id: "PUL-SAN", destination: "Santiago", time: "Consultar en boletería", company: "Buses Pullman Tur", service: "Ventas de pasajes", price: null, availability: "Boletería N° 6" },
-    { id: "ORO-SAN", destination: "Santiago", time: "Consultar en boletería", company: "Buses Oro Verde", service: "Ventas de pasajes", price: null, availability: "Boletería N° 7" },
+    { id: "ORO-SAN", destination: "Santiago", time: "Consultar en boletería", company: "Buses Liquiñe Oro Verde", service: "Ventas de pasajes", price: null, availability: "Boletería N° 7" },
     { id: "LIS-SAN", destination: "Santiago", time: "Consultar en boletería", company: "Buses Lista Azul", service: "Ventas de pasajes", price: null, availability: "Boletería N° 8" },
     { id: "BAR-PIT", destination: "Pitrufquén", time: "Consultar horarios", company: "Buses Barahona", service: "Consultar en terminal", price: null, availability: "Consultar en terminal" },
     { id: "BAR-TEM", destination: "Temuco", time: "Consultar horarios", company: "Buses Barahona", service: "Consultar en terminal", price: null, availability: "Consultar en terminal" },
@@ -161,6 +161,8 @@ const companyCardThemeByName = {
   "Buses Transantin": { accent: "#0068ff", tint: "#00237e", plate: "#ffffff" },
   "Buses Pullman Tur": { accent: "#ff3bb4", tint: "#64004a", plate: "#ffffff" },
   "Buses Oro Verde": { accent: "#7bd64a", tint: "#03272a", plate: "#ffffff" },
+  "Buses Liquiñe Oro Verde": { accent: "#7bd64a", tint: "#03272a", plate: "#ffffff" },
+  "Buses Intercomunal Sur": { accent: "#ff6a17", tint: "#341a08", plate: "#ffffff" },
   "Buses Lista Azul": { accent: "#075cff", tint: "#00145c", plate: "#ffffff" },
   "Buses Barahona": { accent: "#2053d6", tint: "#02185e", plate: "#ffffff" },
   "Servicios Rurales": { accent: "#1bbf90", tint: "#004c58", plate: "#ffffff" }
@@ -173,12 +175,20 @@ const companyCardThemeByLogo = {
   "assets/company-logos/buses-transantin.png": companyCardThemeByName["Buses Transantin"],
   "assets/company-logos/buses-pullman-tur.png": companyCardThemeByName["Buses Pullman Tur"],
   "assets/company-logos/buses-oro-verde.png": companyCardThemeByName["Buses Oro Verde"],
+  "assets/company-logos/buses-liquine-oro-verde.png": companyCardThemeByName["Buses Liquiñe Oro Verde"],
+  "assets/company-logos/buses-intercomunal-sur.png": companyCardThemeByName["Buses Intercomunal Sur"],
   "assets/company-logos/buses-lista-azul.png": companyCardThemeByName["Buses Lista Azul"],
   "assets/company-logos/buses-barahona.png": companyCardThemeByName["Buses Barahona"],
   "assets/company-logos/servicios-rurales.png": companyCardThemeByName["Servicios Rurales"]
 };
 
 const LOGO_PLATE_SOLID_FALLBACK = "#ffffff";
+
+const companyLogoByName = {
+  [normalizedKey("Buses Oro Verde")]: "assets/company-logos/buses-liquine-oro-verde.png",
+  [normalizedKey("Buses Liquiñe Oro Verde")]: "assets/company-logos/buses-liquine-oro-verde.png",
+  [normalizedKey("Buses Intercomunal Sur")]: "assets/company-logos/buses-intercomunal-sur.png"
+};
 
 let activeCompanyIndex = 0;
 let activeSlideIndex = 0;
@@ -218,7 +228,21 @@ function isLegacyRuralOperator(value) {
 
 function canonicalCompanyName(value = "") {
   if (isRuralGroupName(value) || isLegacyRuralOperator(value)) return RURAL_GROUP_NAME;
+  if (normalizedKey(value) === normalizedKey("Buses Oro Verde")) return "Buses Liquiñe Oro Verde";
   return String(value).trim().replace(/\s+/g, " ");
+}
+
+function withDefaultCompanyLogo(company) {
+  const defaultLogo = companyLogoByName[normalizedKey(company.name)];
+  if (!defaultLogo) return company;
+
+  const currentLogo = String(company.logoImage || "").trim();
+  const shouldReplace =
+    !currentLogo ||
+    currentLogo === "assets/company-logos/buses-oro-verde.png" ||
+    currentLogo === "assets/company-logos/logo.png";
+
+  return shouldReplace ? { ...company, logoImage: defaultLogo } : company;
 }
 
 function isHexColor(value = "") {
@@ -315,10 +339,11 @@ function normalizeCompanies(items) {
         }
       : {
           ...company,
-          name: String(company.name).trim().replace(/\s+/g, " ")
+          name: canonicalCompanyName(company.name)
         };
-    const key = normalizedKey(normalizedCompany.name);
-    byName.set(key, byName.has(key) ? mergeCompany(byName.get(key), normalizedCompany) : normalizedCompany);
+    const companyWithLogo = withDefaultCompanyLogo(normalizedCompany);
+    const key = normalizedKey(companyWithLogo.name);
+    byName.set(key, byName.has(key) ? mergeCompany(byName.get(key), companyWithLogo) : companyWithLogo);
   });
 
   if (!byName.has(normalizedKey(RURAL_GROUP_NAME))) {
