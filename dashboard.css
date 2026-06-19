@@ -800,7 +800,7 @@ textarea:focus {
 .company-editor-hero {
   align-items: center;
   background:
-    linear-gradient(135deg, rgba(0, 31, 61, 0.98), rgba(0, 119, 217, 0.9)),
+    linear-gradient(135deg, color-mix(in srgb, var(--editor-tint, #001f3d) 92%, #001f3d), color-mix(in srgb, var(--editor-accent, #0077d9) 78%, #061b3b)),
     radial-gradient(circle at 88% 20%, rgba(24, 168, 224, 0.42), transparent 36%);
   border-radius: 18px;
   box-shadow: 0 18px 38px rgba(7, 27, 59, 0.18);
@@ -883,6 +883,71 @@ textarea:focus {
   background:
     linear-gradient(180deg, #ffffff, #f8fbff),
     radial-gradient(circle at 100% 0%, rgba(0, 119, 217, 0.12), transparent 30%);
+}
+
+.theme-picker {
+  background:
+    linear-gradient(135deg, rgba(0, 119, 217, 0.07), rgba(27, 191, 144, 0.08));
+  border: 1px solid rgba(0, 119, 217, 0.13);
+  border-radius: 16px;
+  display: grid;
+  gap: 14px;
+  margin-top: 14px;
+  padding: 14px;
+}
+
+.theme-picker strong {
+  color: var(--ink);
+  display: block;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.theme-picker small {
+  color: var(--muted);
+  display: block;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.35;
+  margin-top: 4px;
+}
+
+.theme-picker-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.color-field {
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(207, 221, 235, 0.9);
+  border-radius: 14px;
+  gap: 9px;
+  margin: 0;
+  padding: 10px;
+}
+
+.color-field span {
+  font-size: 11px;
+  letter-spacing: 0.01em;
+}
+
+.color-field input[type="color"] {
+  background: #ffffff;
+  border-radius: 12px;
+  cursor: pointer;
+  height: 42px;
+  min-height: 42px;
+  padding: 4px;
+}
+
+.color-field input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.color-field input[type="color"]::-webkit-color-swatch {
+  border: 0;
+  border-radius: 8px;
 }
 
 .company-services-editor {
@@ -1478,6 +1543,7 @@ textarea:focus {
   .analytics-grid,
   .analytics-toolbar,
   .form-grid.two,
+  .theme-picker-grid,
   .report-kpis,
   .report-insights,
   .report-snapshot {

@@ -111,6 +111,18 @@ const companyCardThemeByName = {
   "Buses José Castillo": { accent: "#2f95ff", tint: "rgba(0, 48, 104, 0.9)", plate: "rgba(255, 255, 255, 0.12)" }
 };
 
+const companyCardThemeByLogo = {
+  "assets/vipuray-logo-wide.png": companyCardThemeByName["Buses Vipu Ray"],
+  "assets/company-logos/buses-conaripe.png": companyCardThemeByName["Buses Coñaripe"],
+  "assets/company-logos/buses-villarrica.png": companyCardThemeByName["Buses Villarrica"],
+  "assets/company-logos/buses-transantin.png": companyCardThemeByName["Buses Transantin"],
+  "assets/company-logos/buses-pullman-tur.png": companyCardThemeByName["Buses Pullman Tur"],
+  "assets/company-logos/buses-oro-verde.png": companyCardThemeByName["Buses Oro Verde"],
+  "assets/company-logos/buses-lista-azul.png": companyCardThemeByName["Buses Lista Azul"],
+  "assets/company-logos/buses-barahona.png": companyCardThemeByName["Buses Barahona"],
+  "assets/company-logos/servicios-rurales.png": companyCardThemeByName["Servicios Rurales"]
+};
+
 const infoSlides = [
   {
     label: "Recomendación",
@@ -276,7 +288,10 @@ function mergeCompany(existing, incoming) {
     logo: incoming.logo || existing.logo,
     logoImage: incoming.logoImage || existing.logoImage,
     destinations: incoming.destinations || existing.destinations,
-    ticketOffice: incoming.ticketOffice || existing.ticketOffice
+    ticketOffice: incoming.ticketOffice || existing.ticketOffice,
+    cardAccent: incoming.cardAccent || existing.cardAccent,
+    cardTint: incoming.cardTint || existing.cardTint,
+    logoPlate: incoming.logoPlate || existing.logoPlate
   };
 }
 
@@ -343,7 +358,7 @@ function renderDestinations() {
 }
 
 function renderCompanyCard(company, index) {
-  const theme = companyCardThemeByName[company.name] || companyCardThemes[index % companyCardThemes.length];
+  const theme = getCompanyCardTheme(company, index);
   const label = company.logo;
   const displayName = getCompanyDisplayName(company);
   const destinationList = company.destinations.split(",").map((item) => item.trim()).join(", ");
@@ -368,6 +383,19 @@ function renderCompanyCard(company, index) {
       </button>
     </article>
   `;
+}
+
+function getCompanyCardTheme(company, index) {
+  const fallbackTheme =
+    companyCardThemeByName[company.name] ||
+    companyCardThemeByLogo[company.logoImage] ||
+    companyCardThemes[index % companyCardThemes.length];
+
+  return {
+    accent: company.cardAccent || fallbackTheme.accent,
+    tint: company.cardTint || fallbackTheme.tint,
+    plate: company.logoPlate || fallbackTheme.plate || "rgba(255, 255, 255, 0.14)"
+  };
 }
 
 function getCompanyDisplayName(company) {

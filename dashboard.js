@@ -142,6 +142,42 @@ const RURAL_COMPANY = {
   ticketOffice: "Consultar"
 };
 
+const companyCardThemes = [
+  { accent: "#1e7cff", tint: "#002e91", plate: "#ffffff" },
+  { accent: "#ffca0a", tint: "#d55000", plate: "#ffffff" },
+  { accent: "#7ce04b", tint: "#005c2d", plate: "#ffffff" },
+  { accent: "#a544ff", tint: "#401580", plate: "#ffffff" },
+  { accent: "#19d5ca", tint: "#007e82", plate: "#ffffff" },
+  { accent: "#ffe200", tint: "#5c6300", plate: "#ffffff" },
+  { accent: "#2f95ff", tint: "#0046a5", plate: "#ffffff" },
+  { accent: "#ff4bad", tint: "#9e0044", plate: "#ffffff" },
+  { accent: "#8a35ff", tint: "#49199b", plate: "#ffffff" }
+];
+
+const companyCardThemeByName = {
+  "Buses Vipu Ray": { accent: "#11b7e8", tint: "#003d91", plate: "#ffffff" },
+  "Buses Coñaripe": { accent: "#ff1717", tint: "#800000", plate: "#ffffff" },
+  "Buses Villarrica": { accent: "#ff2525", tint: "#8e0000", plate: "#ffffff" },
+  "Buses Transantin": { accent: "#0068ff", tint: "#00237e", plate: "#ffffff" },
+  "Buses Pullman Tur": { accent: "#ff3bb4", tint: "#64004a", plate: "#ffffff" },
+  "Buses Oro Verde": { accent: "#7bd64a", tint: "#03272a", plate: "#ffffff" },
+  "Buses Lista Azul": { accent: "#075cff", tint: "#00145c", plate: "#ffffff" },
+  "Buses Barahona": { accent: "#2053d6", tint: "#02185e", plate: "#ffffff" },
+  "Servicios Rurales": { accent: "#1bbf90", tint: "#004c58", plate: "#ffffff" }
+};
+
+const companyCardThemeByLogo = {
+  "assets/vipuray-logo-wide.png": companyCardThemeByName["Buses Vipu Ray"],
+  "assets/company-logos/buses-conaripe.png": companyCardThemeByName["Buses Coñaripe"],
+  "assets/company-logos/buses-villarrica.png": companyCardThemeByName["Buses Villarrica"],
+  "assets/company-logos/buses-transantin.png": companyCardThemeByName["Buses Transantin"],
+  "assets/company-logos/buses-pullman-tur.png": companyCardThemeByName["Buses Pullman Tur"],
+  "assets/company-logos/buses-oro-verde.png": companyCardThemeByName["Buses Oro Verde"],
+  "assets/company-logos/buses-lista-azul.png": companyCardThemeByName["Buses Lista Azul"],
+  "assets/company-logos/buses-barahona.png": companyCardThemeByName["Buses Barahona"],
+  "assets/company-logos/servicios-rurales.png": companyCardThemeByName["Servicios Rurales"]
+};
+
 let activeCompanyIndex = 0;
 let activeSlideIndex = 0;
 let activeServiceId = "";
@@ -183,6 +219,28 @@ function canonicalCompanyName(value = "") {
   return String(value).trim().replace(/\s+/g, " ");
 }
 
+function isHexColor(value = "") {
+  return /^#[0-9a-f]{6}$/i.test(String(value).trim());
+}
+
+function normalizeColor(value, fallback) {
+  const clean = String(value || "").trim();
+  return isHexColor(clean) ? clean : fallback;
+}
+
+function getCompanyCardTheme(company = {}, index = 0) {
+  const fallbackTheme =
+    companyCardThemeByName[company.name] ||
+    companyCardThemeByLogo[company.logoImage] ||
+    companyCardThemes[index % companyCardThemes.length];
+
+  return {
+    accent: normalizeColor(company.cardAccent, fallbackTheme.accent),
+    tint: normalizeColor(company.cardTint, fallbackTheme.tint),
+    plate: normalizeColor(company.logoPlate, fallbackTheme.plate)
+  };
+}
+
 function findCompanyIndexByName(name, excludeIndex = -1) {
   const key = normalizedKey(name);
   return data.companies.findIndex((company, index) => index !== excludeIndex && normalizedKey(company.name) === key);
@@ -195,7 +253,10 @@ function mergeCompany(existing, incoming) {
     logo: incoming.logo || existing.logo,
     logoImage: incoming.logoImage || existing.logoImage,
     destinations: incoming.destinations || existing.destinations,
-    ticketOffice: incoming.ticketOffice || existing.ticketOffice
+    ticketOffice: incoming.ticketOffice || existing.ticketOffice,
+    cardAccent: incoming.cardAccent || existing.cardAccent,
+    cardTint: incoming.cardTint || existing.cardTint,
+    logoPlate: incoming.logoPlate || existing.logoPlate
   };
 }
 
@@ -565,12 +626,16 @@ function renderCompanyForm() {
   const form = $("[data-company-form]");
   const company = data.companies[activeCompanyIndex];
   if (!company) return;
+  const theme = getCompanyCardTheme(company, activeCompanyIndex);
   form.elements.index.value = activeCompanyIndex;
   form.elements.name.value = company.name || "";
   form.elements.logo.value = company.logo || "";
   form.elements.logoImage.value = company.logoImage || "";
   form.elements.destinations.value = company.destinations || "";
   form.elements.ticketOffice.value = company.ticketOffice || "";
+  form.elements.cardAccent.value = theme.accent;
+  form.elements.cardTint.value = theme.tint;
+  form.elements.logoPlate.value = theme.plate;
   $("[data-company-form-title]").textContent = company.name || "Nueva empresa";
   renderCompanyUnifiedEditor(company);
 }
@@ -581,6 +646,9 @@ function renderCompanyUnifiedEditor(company) {
   const note = $("[data-company-services-note]");
   const services = getCompanyServices(company.name);
   const isRural = isRuralGroupName(company.name);
+  const theme = getCompanyCardTheme(company, activeCompanyIndex);
+  hero.style.setProperty("--editor-accent", theme.accent);
+  hero.style.setProperty("--editor-tint", theme.tint);
 
   hero.innerHTML = `
     <div class="company-editor-logo">
@@ -941,6 +1009,11 @@ function persistCompanyFromForm(form) {
   const wasRural = isRuralGroupName(oldName) || isLegacyRuralOperator(oldName);
   let company = Object.fromEntries(new FormData(form).entries());
   company.name = canonicalCompanyName(company.name);
+  const existingCompany = data.companies[index] || {};
+  const fallbackTheme = getCompanyCardTheme({ ...existingCompany, ...company }, index);
+  company.cardAccent = normalizeColor(company.cardAccent, fallbackTheme.accent);
+  company.cardTint = normalizeColor(company.cardTint, fallbackTheme.tint);
+  company.logoPlate = normalizeColor(company.logoPlate, fallbackTheme.plate);
 
   if (wasRural || isRuralGroupName(company.name)) {
     company = {
@@ -1007,6 +1080,14 @@ function bindEvents() {
     saveData("Empresa guardada.");
   });
 
+  $("[data-company-form]").addEventListener("input", (event) => {
+    if (!event.target.matches("input[type='color']")) return;
+    const hero = $("[data-company-editor-hero]");
+    const form = event.currentTarget;
+    hero.style.setProperty("--editor-accent", form.elements.cardAccent.value);
+    hero.style.setProperty("--editor-tint", form.elements.cardTint.value);
+  });
+
   $("[data-company-form]").addEventListener("click", (event) => {
     const addButton = event.target.closest("[data-add-company-service]");
     const saveButton = event.target.closest("[data-save-company-service]");
@@ -1064,12 +1145,16 @@ function bindEvents() {
   });
 
   $("[data-add-company]").addEventListener("click", () => {
+    const theme = companyCardThemes[data.companies.length % companyCardThemes.length];
     data.companies.push({
       name: "Nueva empresa",
       logo: "Nueva",
       logoImage: "",
       destinations: "Destino",
-      ticketOffice: "Consultar"
+      ticketOffice: "Consultar",
+      cardAccent: theme.accent,
+      cardTint: theme.tint,
+      logoPlate: theme.plate
     });
     activeCompanyIndex = data.companies.length - 1;
     saveData("Empresa agregada.");
