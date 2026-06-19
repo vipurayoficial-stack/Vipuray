@@ -123,6 +123,9 @@ const companyCardThemeByLogo = {
   "assets/company-logos/servicios-rurales.png": companyCardThemeByName["Servicios Rurales"]
 };
 
+const LOGO_PLATE_GLASS = "rgba(255, 255, 255, 0.14)";
+const LOGO_PLATE_SOLID_FALLBACK = "#ffffff";
+
 const infoSlides = [
   {
     label: "Recomendación",
@@ -291,7 +294,8 @@ function mergeCompany(existing, incoming) {
     ticketOffice: incoming.ticketOffice || existing.ticketOffice,
     cardAccent: incoming.cardAccent || existing.cardAccent,
     cardTint: incoming.cardTint || existing.cardTint,
-    logoPlate: incoming.logoPlate || existing.logoPlate
+    logoPlate: incoming.logoPlate || existing.logoPlate,
+    logoPlateMode: incoming.logoPlateMode || existing.logoPlateMode
   };
 }
 
@@ -394,7 +398,9 @@ function getCompanyCardTheme(company, index) {
   return {
     accent: company.cardAccent || fallbackTheme.accent,
     tint: company.cardTint || fallbackTheme.tint,
-    plate: company.logoPlate || fallbackTheme.plate || "rgba(255, 255, 255, 0.14)"
+    plate: company.logoPlateMode === "color"
+      ? (company.logoPlate || LOGO_PLATE_SOLID_FALLBACK)
+      : (fallbackTheme.plate || LOGO_PLATE_GLASS)
   };
 }
 

@@ -178,6 +178,8 @@ const companyCardThemeByLogo = {
   "assets/company-logos/servicios-rurales.png": companyCardThemeByName["Servicios Rurales"]
 };
 
+const LOGO_PLATE_SOLID_FALLBACK = "#ffffff";
+
 let activeCompanyIndex = 0;
 let activeSlideIndex = 0;
 let activeServiceId = "";
@@ -228,6 +230,10 @@ function normalizeColor(value, fallback) {
   return isHexColor(clean) ? clean : fallback;
 }
 
+function normalizeLogoPlateMode(value = "") {
+  return value === "color" ? "color" : "glass";
+}
+
 function getCompanyCardTheme(company = {}, index = 0) {
   const fallbackTheme =
     companyCardThemeByName[company.name] ||
@@ -237,7 +243,8 @@ function getCompanyCardTheme(company = {}, index = 0) {
   return {
     accent: normalizeColor(company.cardAccent, fallbackTheme.accent),
     tint: normalizeColor(company.cardTint, fallbackTheme.tint),
-    plate: normalizeColor(company.logoPlate, fallbackTheme.plate)
+    plate: normalizeColor(company.logoPlate, fallbackTheme.plate || LOGO_PLATE_SOLID_FALLBACK),
+    plateMode: normalizeLogoPlateMode(company.logoPlateMode)
   };
 }
 
@@ -256,7 +263,8 @@ function mergeCompany(existing, incoming) {
     ticketOffice: incoming.ticketOffice || existing.ticketOffice,
     cardAccent: incoming.cardAccent || existing.cardAccent,
     cardTint: incoming.cardTint || existing.cardTint,
-    logoPlate: incoming.logoPlate || existing.logoPlate
+    logoPlate: incoming.logoPlate || existing.logoPlate,
+    logoPlateMode: incoming.logoPlateMode || existing.logoPlateMode
   };
 }
 
@@ -636,8 +644,17 @@ function renderCompanyForm() {
   form.elements.cardAccent.value = theme.accent;
   form.elements.cardTint.value = theme.tint;
   form.elements.logoPlate.value = theme.plate;
+  form.elements.logoPlateMode.value = theme.plateMode;
+  syncLogoPlateControls(form);
   $("[data-company-form-title]").textContent = company.name || "Nueva empresa";
   renderCompanyUnifiedEditor(company);
+}
+
+function syncLogoPlateControls(form) {
+  const isColorMode = form.elements.logoPlateMode.value === "color";
+  const colorInput = form.elements.logoPlate;
+  colorInput.disabled = !isColorMode;
+  colorInput.closest(".color-field")?.classList.toggle("is-muted", !isColorMode);
 }
 
 function renderCompanyUnifiedEditor(company) {
@@ -1013,6 +1030,7 @@ function persistCompanyFromForm(form) {
   const fallbackTheme = getCompanyCardTheme({ ...existingCompany, ...company }, index);
   company.cardAccent = normalizeColor(company.cardAccent, fallbackTheme.accent);
   company.cardTint = normalizeColor(company.cardTint, fallbackTheme.tint);
+  company.logoPlateMode = normalizeLogoPlateMode(company.logoPlateMode);
   company.logoPlate = normalizeColor(company.logoPlate, fallbackTheme.plate);
 
   if (wasRural || isRuralGroupName(company.name)) {
@@ -1088,6 +1106,11 @@ function bindEvents() {
     hero.style.setProperty("--editor-tint", form.elements.cardTint.value);
   });
 
+  $("[data-company-form]").addEventListener("change", (event) => {
+    if (event.target.name !== "logoPlateMode") return;
+    syncLogoPlateControls(event.currentTarget);
+  });
+
   $("[data-company-form]").addEventListener("click", (event) => {
     const addButton = event.target.closest("[data-add-company-service]");
     const saveButton = event.target.closest("[data-save-company-service]");
@@ -1154,7 +1177,8 @@ function bindEvents() {
       ticketOffice: "Consultar",
       cardAccent: theme.accent,
       cardTint: theme.tint,
-      logoPlate: theme.plate
+      logoPlate: theme.plate,
+      logoPlateMode: "glass"
     });
     activeCompanyIndex = data.companies.length - 1;
     saveData("Empresa agregada.");
