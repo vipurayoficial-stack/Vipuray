@@ -521,6 +521,23 @@ function renderResults(companyName) {
   prepareRevealElements($$(".result-card", results));
 }
 
+function showCompanySchedule(companyName, source = "search_select") {
+  if (!companyName) {
+    renderInitialResults();
+    return;
+  }
+
+  const selectedCompany = companies.find((company) => company.name === companyName);
+  renderResults(companyName);
+  trackAnalyticsEvent("schedule_query", {
+    source,
+    company: companyName,
+    destination: selectedCompany?.destinations || ""
+  });
+  scrollToSection("#resultados");
+  showToast("Información actualizada.");
+}
+
 function groupServicesByDestination(companyServices) {
   const groups = new Map();
   companyServices.forEach((service) => {
@@ -597,19 +614,12 @@ function bindEvents() {
   $("[data-search-form]").addEventListener("submit", (event) => {
     event.preventDefault();
     const form = event.currentTarget;
-    const companyName = form.elements.company.value;
-    const selectedCompany = companies.find((company) => company.name === companyName);
-    renderResults(companyName);
-    trackAnalyticsEvent("schedule_query", {
-      source: "search_form",
-      company: companyName,
-      destination: selectedCompany?.destinations || ""
-    });
-    scrollToSection("#resultados");
-    showToast("Información actualizada.");
+    showCompanySchedule(form.elements.company.value, "search_form");
   });
 
-  $("[data-search-form]").elements.company.addEventListener("change", renderInitialResults);
+  $("[data-search-form]").elements.company.addEventListener("change", (event) => {
+    showCompanySchedule(event.currentTarget.value, "search_select");
+  });
 
   $("[data-clear-results]").addEventListener("click", () => {
     $("[data-search-form]").reset();
@@ -634,7 +644,7 @@ function bindEvents() {
         destination: selectedCompany?.destinations || ""
       });
       form.elements.company.value = companyButton.dataset.cardCompany;
-      form.requestSubmit();
+      showCompanySchedule(companyName, "company_card");
       return;
     }
 
