@@ -1497,6 +1497,7 @@ h2 {
   border-radius: 16px;
   box-shadow: 0 22px 48px rgba(7, 27, 59, 0.18);
   color: var(--white);
+  height: 540px;
   min-height: 540px;
   overflow: hidden;
   position: relative;
@@ -1527,8 +1528,10 @@ h2 {
 
 .info-slide {
   animation: slideContentIn 0.5s var(--ease-out) both;
+  box-sizing: border-box;
   display: grid;
   gap: 22px;
+  height: 100%;
   max-width: 610px;
   padding: 68px 72px 82px;
   position: relative;
@@ -2381,6 +2384,7 @@ tr:last-child td {
   }
 
   .info-slider {
+    height: 500px;
     min-height: 500px;
   }
 
@@ -2554,6 +2558,7 @@ tr:last-child td {
     background:
       linear-gradient(180deg, rgba(0, 31, 65, 0.98) 0%, rgba(0, 42, 82, 0.88) 58%, rgba(0, 31, 65, 0.72) 100%),
       var(--slide-image) center / cover;
+    height: 680px;
     min-height: 680px;
   }
 
