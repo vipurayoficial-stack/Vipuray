@@ -769,20 +769,45 @@ function scrollToSection(selector) {
   target.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-function handleContactSubmit(event) {
+async function handleContactSubmit(event) {
   event.preventDefault();
   const form = event.currentTarget;
   const data = Object.fromEntries(new FormData(form).entries());
-  const messages = JSON.parse(localStorage.getItem("vipurayMessages") || "[]");
-  messages.push({ ...data, createdAt: new Date().toISOString() });
-  localStorage.setItem("vipurayMessages", JSON.stringify(messages));
-  trackAnalyticsEvent("contact_form", {
-    source: "contact_form",
-    label: "Solicitud enviada"
-  });
-  $("[data-contact-status]").textContent = "Solicitud enviada. Te contactaremos a la brevedad.";
-  form.reset();
-  showToast("Mensaje recibido.");
+  const status = $("[data-contact-status]");
+  const submitButton = form.querySelector("button[type='submit']");
+  const originalButtonText = submitButton.textContent;
+
+  status.textContent = "Enviando solicitud...";
+  submitButton.disabled = true;
+  submitButton.textContent = "Enviando...";
+
+  try {
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(data)
+    });
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok || !result.ok) {
+      throw new Error(result.error || "No se pudo enviar el mensaje.");
+    }
+
+    trackAnalyticsEvent("contact_form", {
+      source: "contact_form",
+      label: "Solicitud enviada"
+    });
+    status.textContent = "Solicitud enviada. Te contactaremos a la brevedad.";
+    form.reset();
+    showToast("Mensaje enviado.");
+  } catch (_error) {
+    status.textContent =
+      "No pudimos enviar el mensaje en este momento. Escríbenos a vipuray.oficial@gmail.com o por Instagram.";
+    showToast("No se pudo enviar el mensaje.");
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = originalButtonText;
+  }
 }
 
 function trackAnalyticsEvent(type, payload = {}) {
