@@ -9,3 +9,9 @@ https://:project.pages.dev/*
 
 https://:version.:project.pages.dev/*
   X-Robots-Tag: noindex
+
+/app.js
+  Cache-Control: public, max-age=60, must-revalidate
+
+/dashboard.js
+  Cache-Control: public, max-age=60, must-revalidate
