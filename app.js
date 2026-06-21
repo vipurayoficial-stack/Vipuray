@@ -244,7 +244,6 @@ async function applyDashboardData() {
 
   const remoteData = await fetchDashboardDataFromApi();
   if (isValidDashboardData(remoteData)) {
-    if (isValidDashboardData(localData) && isNewerDashboardData(localData, remoteData)) return;
     applyDashboardDataSet(remoteData);
     storeLocalDashboardData(remoteData);
   }
@@ -272,15 +271,6 @@ function isValidDashboardData(value) {
       Array.isArray(value.services) &&
       Array.isArray(value.infoSlides)
   );
-}
-
-function getDashboardDataUpdatedAtTime(value) {
-  const time = new Date(value?.updatedAt || "").getTime();
-  return Number.isFinite(time) ? time : 0;
-}
-
-function isNewerDashboardData(left, right) {
-  return getDashboardDataUpdatedAtTime(left) > getDashboardDataUpdatedAtTime(right);
 }
 
 function readLocalDashboardData() {
