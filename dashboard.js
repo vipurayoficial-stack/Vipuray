@@ -784,11 +784,17 @@ function formatDate(value) {
 function renderCompanies() {
   const list = $("[data-company-list]");
   list.innerHTML = data.companies.map((company, index) => `
-    <button class="company-row${index === activeCompanyIndex ? " is-active" : ""}" type="button" data-company-index="${index}">
-      <span class="row-pill">Boletería ${escapeHtml(company.ticketOffice)}</span>
-      <strong>${escapeHtml(company.name)}</strong>
-      <span>${escapeHtml(company.destinations)}</span>
-    </button>
+    <article class="company-row${index === activeCompanyIndex ? " is-active" : ""}">
+      <button class="company-select-button" type="button" data-company-index="${index}">
+        <span class="row-pill">Orden ${String(index + 1).padStart(2, "0")}</span>
+        <strong>${escapeHtml(company.name)}</strong>
+        <span>${escapeHtml(company.destinations)}</span>
+      </button>
+      <div class="company-order-actions" aria-label="Orden de ${escapeHtml(company.name)}">
+        <button type="button" aria-label="Subir ${escapeHtml(company.name)}" data-move-company-index="${index}" data-move-company="-1"${index === 0 ? " disabled" : ""}>↑</button>
+        <button type="button" aria-label="Bajar ${escapeHtml(company.name)}" data-move-company-index="${index}" data-move-company="1"${index === data.companies.length - 1 ? " disabled" : ""}>↓</button>
+      </div>
+    </article>
   `).join("");
 }
 
@@ -1227,6 +1233,25 @@ function persistCompanyFromForm(form) {
   return savedCompany;
 }
 
+function moveCompany(fromIndex, direction) {
+  const toIndex = fromIndex + direction;
+  if (fromIndex < 0 || toIndex < 0 || fromIndex >= data.companies.length || toIndex >= data.companies.length) {
+    return;
+  }
+
+  const [company] = data.companies.splice(fromIndex, 1);
+  data.companies.splice(toIndex, 0, company);
+
+  if (activeCompanyIndex === fromIndex) {
+    activeCompanyIndex = toIndex;
+  } else if (activeCompanyIndex === toIndex) {
+    activeCompanyIndex = fromIndex;
+  }
+
+  activeServiceFilter = data.companies[activeCompanyIndex]?.name || "";
+  activeServiceId = "";
+}
+
 function readRouteEditor(row, company) {
   const destination = $("[data-route-field='destination']", row)?.value.trim() || "";
   const time = $("[data-route-field='time']", row)?.value.trim() || "";
@@ -1245,7 +1270,14 @@ function readRouteEditor(row, company) {
 }
 
 function bindEvents() {
-  $("[data-company-list]").addEventListener("click", (event) => {
+  $("[data-company-list]").addEventListener("click", async (event) => {
+    const moveButton = event.target.closest("[data-move-company]");
+    if (moveButton) {
+      moveCompany(Number(moveButton.dataset.moveCompanyIndex), Number(moveButton.dataset.moveCompany));
+      await saveData("Orden de empresas actualizado.");
+      return;
+    }
+
     const button = event.target.closest("[data-company-index]");
     if (!button) return;
     activeCompanyIndex = Number(button.dataset.companyIndex);
