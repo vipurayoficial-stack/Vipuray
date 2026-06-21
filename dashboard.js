@@ -1,5 +1,6 @@
 const STORAGE_KEY = "vipurayDashboardData";
 const ANALYTICS_STORAGE_KEY = "vipurayAnalyticsEvents";
+const CONTENT_API_URL = "/api/content";
 
 const defaultData = {
   companies: [
@@ -194,6 +195,12 @@ let activeCompanyIndex = 0;
 let activeSlideIndex = 0;
 let activeServiceId = "";
 let activeServiceFilter = "";
+let contentState = {
+  source: "local",
+  saving: false,
+  error: ""
+};
+let contentEditedInSession = false;
 let data = loadData();
 let activeReportId = data.reports?.[0]?.id || "";
 let analyticsState = {
@@ -312,17 +319,60 @@ function normalizeDataSet(value) {
   return normalized;
 }
 
-function loadData() {
+function isValidDashboardData(value) {
+  return Boolean(
+    value &&
+      typeof value === "object" &&
+      Array.isArray(value.companies) &&
+      Array.isArray(value.services) &&
+      Array.isArray(value.infoSlides)
+  );
+}
+
+function readLocalData() {
   try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
-    if (saved && Array.isArray(saved.companies) && Array.isArray(saved.services) && Array.isArray(saved.infoSlides)) {
-      if (!Array.isArray(saved.reports)) saved.reports = clone(defaultData.reports);
-      return normalizeDataSet(saved);
-    }
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
   } catch (error) {
     console.warn("No se pudieron cargar los datos guardados.", error);
+    return null;
+  }
+}
+
+function storeLocalData(value) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
+  } catch (error) {
+    console.warn("No se pudo guardar el respaldo local.", error);
+  }
+}
+
+function loadData() {
+  const saved = readLocalData();
+  if (isValidDashboardData(saved)) {
+    if (!Array.isArray(saved.reports)) saved.reports = clone(defaultData.reports);
+    return normalizeDataSet(saved);
   }
   return normalizeDataSet(clone(defaultData));
+}
+
+function syncActiveReportId() {
+  if (!Array.isArray(data.reports) || !data.reports.length) {
+    activeReportId = "";
+    return;
+  }
+
+  if (!data.reports.some((report) => report.id === activeReportId)) {
+    activeReportId = data.reports[0].id;
+  }
+}
+
+function getDataUpdatedAtTime(value) {
+  const time = new Date(value?.updatedAt || "").getTime();
+  return Number.isFinite(time) ? time : 0;
+}
+
+function isNewerData(left, right) {
+  return getDataUpdatedAtTime(left) > getDataUpdatedAtTime(right);
 }
 
 function normalizeCompanies(items) {
@@ -366,12 +416,95 @@ function normalizeServices(items) {
   });
 }
 
-function saveData(message = "Cambios guardados.") {
+async function hydrateContentFromApi() {
+  try {
+    const response = await fetch(CONTENT_API_URL, {
+      headers: { accept: "application/json" },
+      cache: "no-store"
+    });
+    const payload = await response.json().catch(() => ({}));
+
+    if (!response.ok || !payload.configured) {
+      contentState.source = "local";
+      contentState.error = "D1 aun no esta conectado. Se usa respaldo local.";
+      renderAll();
+      return;
+    }
+
+    if (isValidDashboardData(payload.data)) {
+      if (contentEditedInSession) return;
+      const localData = readLocalData();
+      if (isValidDashboardData(localData) && isNewerData(localData, payload.data)) {
+        data = normalizeDataSet(localData);
+        await saveData("Contenido local sincronizado con D1.");
+        return;
+      }
+      if (!Array.isArray(payload.data.reports)) payload.data.reports = clone(defaultData.reports);
+      data = normalizeDataSet(payload.data);
+      syncActiveReportId();
+      contentState.source = "remote";
+      contentState.error = "";
+      storeLocalData(data);
+      renderAll();
+      return;
+    }
+
+    if (isValidDashboardData(readLocalData())) {
+      await saveData("Contenido local sincronizado con D1.");
+      return;
+    }
+
+    contentState.source = "remote";
+    contentState.error = "D1 conectado, usando datos base hasta guardar cambios.";
+    renderAll();
+  } catch (_error) {
+    contentState.source = "local";
+    contentState.error = "No se pudo leer D1. Se usa respaldo local.";
+    renderAll();
+  }
+}
+
+async function persistContentToApi() {
+  try {
+    const response = await fetch(CONTENT_API_URL, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+        accept: "application/json"
+      },
+      body: JSON.stringify({ data })
+    });
+    const payload = await response.json().catch(() => ({}));
+
+    if (!response.ok || !payload.ok) {
+      throw new Error(payload.error || "No se pudo guardar en D1.");
+    }
+
+    if (payload.updatedAt) data.updatedAt = payload.updatedAt;
+    storeLocalData(data);
+    contentState.source = "remote";
+    contentState.error = "";
+    return true;
+  } catch (_error) {
+    contentState.source = "local";
+    contentState.error = "Guardado local. Falta sincronizar con D1.";
+    return false;
+  }
+}
+
+async function saveData(message = "Cambios guardados.") {
+  contentEditedInSession = true;
   data = normalizeDataSet(data);
+  syncActiveReportId();
   data.updatedAt = new Date().toISOString();
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  storeLocalData(data);
+  contentState.saving = true;
+  contentState.error = "";
   renderAll();
-  showToast(message);
+  const savedRemotely = await persistContentToApi();
+  contentState.saving = false;
+  renderAll();
+  showToast(savedRemotely ? message : "Guardado local. Revisa conexion con D1.");
 }
 
 function renderAll() {
@@ -402,7 +535,11 @@ function renderSavedStatus() {
   const label = data.updatedAt
     ? `Ultimo guardado: ${new Date(data.updatedAt).toLocaleString("es-CL")}.`
     : "Usando datos base. Guarda cambios para aplicarlos en la pagina publica.";
-  $("[data-last-saved]").textContent = label;
+  let syncLabel = " Respaldo local activo.";
+  if (contentState.saving) syncLabel = " Sincronizando con D1...";
+  else if (contentState.source === "remote") syncLabel = " Guardado global en Cloudflare D1.";
+  else if (contentState.error) syncLabel = ` ${contentState.error}`;
+  $("[data-last-saved]").textContent = `${label}${syncLabel}`;
 }
 
 function renderAnalytics() {
@@ -1420,15 +1557,14 @@ function exportData() {
 }
 
 function resetData() {
-  if (!confirm("¿Restaurar los datos base? Se perderan los cambios locales.")) return;
+  if (!confirm("¿Restaurar los datos base? Esto reemplazara el contenido global guardado.")) return;
   localStorage.removeItem(STORAGE_KEY);
   data = normalizeDataSet(clone(defaultData));
   activeCompanyIndex = 0;
   activeSlideIndex = 0;
   activeServiceId = "";
   activeServiceFilter = "";
-  renderAll();
-  showToast("Datos restaurados.");
+  saveData("Datos base restaurados.");
 }
 
 function numberValue(value) {
@@ -1586,3 +1722,4 @@ bindEvents();
 bindNavigationState();
 renderAll();
 refreshAnalytics();
+hydrateContentFromApi();

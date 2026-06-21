@@ -8,7 +8,7 @@ export async function onRequest(context) {
   const { request, env, next } = context;
   const url = new URL(request.url);
 
-  if (!isProtectedPath(url.pathname)) {
+  if (!isProtectedPath(url.pathname, request.method)) {
     return next();
   }
 
@@ -43,7 +43,8 @@ export async function onRequest(context) {
   });
 }
 
-function isProtectedPath(pathname) {
+function isProtectedPath(pathname, method = "GET") {
+  if (pathname === "/api/content" && !["GET", "HEAD", "OPTIONS"].includes(method)) return true;
   return PROTECTED_PATHS.has(pathname) || pathname.startsWith("/dashboard/");
 }
 

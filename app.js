@@ -194,6 +194,7 @@ const infoSlides = [
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
 const DASHBOARD_STORAGE_KEY = "vipurayDashboardData";
+const CONTENT_API_URL = "/api/content";
 const ANALYTICS_STORAGE_KEY = "vipurayAnalyticsEvents";
 const ANALYTICS_SESSION_KEY = "vipurayAnalyticsSession";
 const RURAL_GROUP_NAME = "Servicios Rurales";
@@ -216,8 +217,8 @@ const RURAL_COMPANY = {
 const formatMoney = (value) =>
   new Intl.NumberFormat("es-CL", { style: "currency", currency: "CLP", maximumFractionDigits: 0 }).format(value);
 
-function init() {
-  applyDashboardData();
+async function init() {
+  await applyDashboardData();
   populateSearch();
   renderDestinations();
   renderInfoSlider();
@@ -232,27 +233,89 @@ function init() {
   });
 }
 
-function applyDashboardData() {
+async function applyDashboardData() {
+  companies.splice(0, companies.length, ...normalizeCompanies(companies));
+  services.splice(0, services.length, ...normalizeServices(services));
+
+  const localData = readLocalDashboardData();
+  if (isValidDashboardData(localData)) {
+    applyDashboardDataSet(localData);
+  }
+
+  const remoteData = await fetchDashboardDataFromApi();
+  if (isValidDashboardData(remoteData)) {
+    if (isValidDashboardData(localData) && isNewerDashboardData(localData, remoteData)) return;
+    applyDashboardDataSet(remoteData);
+    storeLocalDashboardData(remoteData);
+  }
+}
+
+function applyDashboardDataSet(saved) {
+  if (Array.isArray(saved.companies) && saved.companies.length) {
+    companies.splice(0, companies.length, ...normalizeCompanies(saved.companies));
+  }
+
+  if (Array.isArray(saved.services) && saved.services.length) {
+    services.splice(0, services.length, ...normalizeServices(saved.services));
+  }
+
+  if (Array.isArray(saved.infoSlides) && saved.infoSlides.length) {
+    infoSlides.splice(0, infoSlides.length, ...saved.infoSlides);
+  }
+}
+
+function isValidDashboardData(value) {
+  return Boolean(
+    value &&
+      typeof value === "object" &&
+      Array.isArray(value.companies) &&
+      Array.isArray(value.services) &&
+      Array.isArray(value.infoSlides)
+  );
+}
+
+function getDashboardDataUpdatedAtTime(value) {
+  const time = new Date(value?.updatedAt || "").getTime();
+  return Number.isFinite(time) ? time : 0;
+}
+
+function isNewerDashboardData(left, right) {
+  return getDashboardDataUpdatedAtTime(left) > getDashboardDataUpdatedAtTime(right);
+}
+
+function readLocalDashboardData() {
   try {
-    companies.splice(0, companies.length, ...normalizeCompanies(companies));
-    services.splice(0, services.length, ...normalizeServices(services));
-
-    const saved = JSON.parse(localStorage.getItem(DASHBOARD_STORAGE_KEY) || "null");
-    if (!saved || typeof saved !== "object") return;
-
-    if (Array.isArray(saved.companies) && saved.companies.length) {
-      companies.splice(0, companies.length, ...normalizeCompanies(saved.companies));
-    }
-
-    if (Array.isArray(saved.services) && saved.services.length) {
-      services.splice(0, services.length, ...normalizeServices(saved.services));
-    }
-
-    if (Array.isArray(saved.infoSlides) && saved.infoSlides.length) {
-      infoSlides.splice(0, infoSlides.length, ...saved.infoSlides);
-    }
+    return JSON.parse(localStorage.getItem(DASHBOARD_STORAGE_KEY) || "null");
   } catch (error) {
-    console.warn("No se pudieron cargar los datos del dashboard.", error);
+    console.warn("No se pudieron cargar los datos locales del dashboard.", error);
+    return null;
+  }
+}
+
+function storeLocalDashboardData(value) {
+  try {
+    localStorage.setItem(DASHBOARD_STORAGE_KEY, JSON.stringify(value));
+  } catch (_error) {
+    // El sitio publico puede funcionar con D1 aunque el navegador bloquee almacenamiento local.
+  }
+}
+
+async function fetchDashboardDataFromApi() {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 2500);
+
+  try {
+    const response = await fetch(CONTENT_API_URL, {
+      headers: { accept: "application/json" },
+      cache: "no-store",
+      signal: controller.signal
+    });
+    const payload = await response.json().catch(() => ({}));
+    return response.ok && payload.configured ? payload.data : null;
+  } catch (_error) {
+    return null;
+  } finally {
+    clearTimeout(timeout);
   }
 }
 
