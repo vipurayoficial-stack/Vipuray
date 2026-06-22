@@ -136,6 +136,21 @@ const companyLogoByName = {
   [normalizedKey("Buses Intercomunal Sur")]: "assets/company-logos/buses-intercomunal-sur.png"
 };
 
+const companyWebsiteByName = {
+  [normalizedKey("Buses Transantin")]: {
+    url: "https://transantin.cl/",
+    label: "Ir a Transantin"
+  },
+  [normalizedKey("Buses Pullman Tur")]: {
+    url: "https://home.busespullmantur.cl/",
+    label: "Ir a Pullman Tur"
+  },
+  [normalizedKey("Buses Liquiñe Oro Verde")]: {
+    url: "https://www.busesliquine.cl/",
+    label: "Ir a Liquiñe"
+  }
+};
+
 const infoSlides = [
   {
     label: "Recomendación",
@@ -523,6 +538,7 @@ function renderResults(companyName) {
   const destinationLabel = destinationCount === 1 ? "Destino disponible" : "Destinos disponibles";
   const resultCountLabel = destinationCount === 1 ? "destino encontrado" : "destinos encontrados";
   const priceConsultation = formatPriceConsultation(company);
+  const companyWebsite = getCompanyWebsite(company.name);
   const logoMarkup = company.logoImage
     ? `<img src="${company.logoImage}" alt="${company.name}">`
     : `<span>${company.logo}</span>`;
@@ -562,7 +578,7 @@ function renderResults(companyName) {
           </div>
         </div>
         <div class="service-list">
-          ${groupedServices.map((service) => renderCompanyService(service)).join("")}
+          ${groupedServices.map((service) => renderCompanyService(service, company, companyWebsite)).join("")}
         </div>
         <div class="price-row">
           <strong>${ticketIcon()}${priceConsultation}</strong>
@@ -617,7 +633,34 @@ function groupServicesByDestination(companyServices) {
   }));
 }
 
-function renderCompanyService(service) {
+function getCompanyWebsite(companyName) {
+  return companyWebsiteByName[normalizedKey(companyName)] || null;
+}
+
+function renderCompanyService(service, company, companyWebsite = null) {
+  const infoMarkup = companyWebsite
+    ? `
+      <div class="service-time service-website">
+        ${externalLinkIcon()}
+        <div>
+          <small>Sitio oficial</small>
+          <a class="company-website-button" href="${companyWebsite.url}" target="_blank" rel="noopener noreferrer" data-company-website="${escapeHtml(company.name)}">
+            ${escapeHtml(companyWebsite.label)}
+            ${arrowIcon()}
+          </a>
+        </div>
+      </div>
+    `
+    : `
+      <div class="service-time">
+        ${clockIcon()}
+        <div>
+        <small>Horario</small>
+        <span>${service.times}</span>
+        </div>
+      </div>
+    `;
+
   return `
     <div class="service-item">
       <div class="service-destination">
@@ -627,13 +670,7 @@ function renderCompanyService(service) {
           <strong>${service.destination}</strong>
         </div>
       </div>
-      <div class="service-time">
-        ${clockIcon()}
-        <div>
-        <small>Horario</small>
-        <span>${service.times}</span>
-        </div>
-      </div>
+      ${infoMarkup}
     </div>
   `;
 }
@@ -725,6 +762,15 @@ function bindEvents() {
       trackAnalyticsEvent("info_cta_click", {
         source: "info_slider",
         label: slide?.label || "Aviso"
+      });
+    }
+
+    const companyWebsiteLink = event.target.closest("[data-company-website]");
+    if (companyWebsiteLink) {
+      trackAnalyticsEvent("info_cta_click", {
+        source: "company_website",
+        company: companyWebsiteLink.dataset.companyWebsite,
+        label: companyWebsiteLink.textContent.trim() || "Sitio oficial"
       });
     }
 
@@ -1022,6 +1068,10 @@ function infoIcon() {
 
 function mailIcon() {
   return `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>`;
+}
+
+function externalLinkIcon() {
+  return `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 4h6v6"/><path d="m10 14 10-10"/><path d="M20 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h5"/></svg>`;
 }
 
 function arrowIcon() {

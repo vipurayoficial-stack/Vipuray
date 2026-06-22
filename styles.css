@@ -1330,6 +1330,40 @@ h2 {
   box-shadow: 0 10px 22px rgba(0, 170, 190, 0.18);
 }
 
+.service-website {
+  align-items: center;
+}
+
+.service-website > svg {
+  background: linear-gradient(135deg, #0077d9, #00b89c);
+}
+
+.company-website-button {
+  align-items: center;
+  background: linear-gradient(135deg, var(--blue), #05a8d8);
+  border-radius: 999px;
+  box-shadow: 0 14px 28px rgba(0, 119, 217, 0.18);
+  color: #ffffff;
+  display: inline-flex;
+  font-size: 15px;
+  font-weight: 950;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  text-decoration: none;
+}
+
+.company-website-button svg {
+  fill: none;
+  flex: 0 0 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.4;
+  width: 18px;
+}
+
 .service-item strong {
   color: var(--blue-dark);
   font-size: 18px;
@@ -2596,6 +2630,10 @@ tr:last-child td {
   .service-time {
     border-left: 0;
     padding-left: 0;
+  }
+
+  .company-website-button {
+    width: fit-content;
   }
 
   .section {
