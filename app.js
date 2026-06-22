@@ -871,8 +871,10 @@ function renderInfoSlider() {
           .map((feature) => `
             <div>
               <span>${infoFeatureIcon(feature.icon)}</span>
-              <strong>${feature.title}</strong>
-              <small>${feature.text}</small>
+              <p>
+                <strong>${feature.title}</strong>
+                <small>${feature.text}</small>
+              </p>
             </div>
           `)
           .join("")}
