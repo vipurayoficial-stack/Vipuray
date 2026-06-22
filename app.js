@@ -491,7 +491,6 @@ function renderCompanyCard(company, index) {
   const label = company.logo;
   const displayName = getCompanyDisplayName(company);
   const destinationList = company.destinations.split(",").map((item) => item.trim()).join(", ");
-  const contact = getCompanyContact(company.name);
 
   return `
     <article class="destination-card company-destination-card" style="--card-accent: ${theme.accent}; --card-tint: ${theme.tint}; --logo-plate: ${theme.plate || "rgba(255, 255, 255, 0.14)"}">
@@ -507,7 +506,6 @@ function renderCompanyCard(company, index) {
           <span class="meta-destinations">${locationIcon()}${destinationList}</span>
           <span>${ticketIcon()}Boletería ${company.ticketOffice}</span>
         </div>
-        ${renderCompanyCardContact(contact)}
       </div>
       <button class="company-card-action" type="button" aria-label="Consultar ${company.name}" data-card-company="${company.name}">
         ${arrowIcon()}
@@ -674,17 +672,6 @@ function getCompanyWebsite(companyName) {
 
 function getCompanyContact(companyName) {
   return companyContactByName[normalizedKey(companyName)] || null;
-}
-
-function renderCompanyCardContact(contact) {
-  if (!contact) return "";
-
-  return `
-    <div class="company-card-contact">
-      ${contact.phone ? `<a href="${whatsappUrl(contact.phone)}">${phoneIcon()}<span>${escapeHtml(contact.phone)}</span></a>` : ""}
-      ${contact.email ? `<a href="mailto:${escapeHtml(contact.email)}">${emailIcon()}<span>${escapeHtml(contact.email)}</span></a>` : ""}
-    </div>
-  `;
 }
 
 function renderCompanyContactPanel(company) {
