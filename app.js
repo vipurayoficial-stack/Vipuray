@@ -560,7 +560,6 @@ function renderResults(companyName) {
         </div>
         <div class="company-result-actions">
           <span class="company-pill">${ticketIcon()}Boletería ${company.ticketOffice}</span>
-          <a class="table-action" href="${companyEmailUrl(company.name)}">${mailIcon()}Consultar por correo</a>
         </div>
       </div>
       <div class="company-info-grid">
@@ -1038,12 +1037,6 @@ function getFrequencyText(destinationServices) {
   return "Horario informado por el terminal";
 }
 
-function companyEmailUrl(company) {
-  const subject = `Consulta de horarios - ${company}`;
-  const body = `Hola Vipu-Ray,\n\nQuiero consultar horarios, valores y frecuencia de salidas de ${company}.\n\nGracias.`;
-  return `mailto:vipuray.oficial@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-}
-
 function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -1079,10 +1072,6 @@ function searchIcon() {
 
 function infoIcon() {
   return `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 16v-4"/><path d="M12 8h.01"/><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>`;
-}
-
-function mailIcon() {
-  return `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>`;
 }
 
 function arrowIcon() {
