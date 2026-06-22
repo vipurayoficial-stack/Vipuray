@@ -145,6 +145,10 @@ const companyWebsiteByName = {
     url: "https://home.busespullmantur.cl/",
     label: "Ir a Pullman Tur"
   },
+  [normalizedKey("Buses Oro Verde")]: {
+    url: "https://www.busesliquine.cl/",
+    label: "Ir a Liquiñe"
+  },
   [normalizedKey("Buses Liquiñe Oro Verde")]: {
     url: "https://www.busesliquine.cl/",
     label: "Ir a Liquiñe"
@@ -519,8 +523,9 @@ function renderInitialResults() {
 
 function renderResults(companyName) {
   const results = $("[data-results]");
-  const company = companies.find((item) => item.name === companyName);
-  const matchedServices = services.filter((service) => service.company === companyName);
+  const companyKey = normalizedKey(companyName);
+  const company = companies.find((item) => normalizedKey(item.name) === companyKey);
+  const matchedServices = services.filter((service) => normalizedKey(service.company) === companyKey);
 
   if (!company || !matchedServices.length) {
     results.innerHTML = `
@@ -638,13 +643,14 @@ function getCompanyWebsite(companyName) {
 }
 
 function renderCompanyService(service, company, companyWebsite = null) {
+  const companyName = company?.name || "";
   const infoMarkup = companyWebsite
     ? `
       <div class="service-time service-website">
         ${externalLinkIcon()}
         <div>
           <small>Sitio oficial</small>
-          <a class="company-website-button" href="${companyWebsite.url}" target="_blank" rel="noopener noreferrer" data-company-website="${escapeHtml(company.name)}">
+          <a class="company-website-button" href="${companyWebsite.url}" target="_blank" rel="noopener noreferrer" data-company-website="${escapeHtml(companyName)}">
             ${escapeHtml(companyWebsite.label)}
             ${arrowIcon()}
           </a>
