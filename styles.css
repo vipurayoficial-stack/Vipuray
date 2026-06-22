@@ -949,6 +949,43 @@ h2 {
   width: 17px;
 }
 
+.company-card-contact {
+  display: grid;
+  gap: 5px;
+  margin-top: 3px;
+  max-width: 270px;
+}
+
+.company-card-contact a {
+  align-items: center;
+  color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  font-size: 11px;
+  font-weight: 850;
+  gap: 8px;
+  line-height: 1.24;
+  min-width: 0;
+  text-decoration: none;
+}
+
+.company-card-contact a span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.company-card-contact svg {
+  fill: none;
+  flex: 0 0 15px;
+  height: 15px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+  width: 15px;
+}
+
 .meta-destinations {
   max-width: 250px;
 }
@@ -1174,6 +1211,10 @@ h2 {
   background: rgba(255, 255, 255, 0.92);
 }
 
+.company-contact-info {
+  background: linear-gradient(90deg, rgba(245, 251, 255, 0.96), rgba(255, 255, 255, 0.9));
+}
+
 .company-info-item svg {
   background: linear-gradient(135deg, #eef7ff, #ffffff);
   border: 1px solid rgba(0, 119, 217, 0.13);
@@ -1204,6 +1245,40 @@ h2 {
   color: var(--ink);
   display: block;
   line-height: 1.35;
+}
+
+.company-contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.company-contact-links a {
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid rgba(0, 119, 217, 0.12);
+  border-radius: 999px;
+  box-shadow: 0 10px 22px rgba(7, 27, 59, 0.05);
+  color: var(--blue-dark);
+  display: inline-flex;
+  font-size: 13px;
+  font-weight: 850;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 12px;
+  text-decoration: none;
+}
+
+.company-contact-links a svg {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  flex: 0 0 16px;
+  height: 16px;
+  padding: 0;
+  stroke: var(--blue);
+  width: 16px;
 }
 
 .company-services-panel {
@@ -2632,6 +2707,22 @@ tr:last-child td {
 
   .company-info-grid {
     grid-template-columns: 1fr;
+  }
+
+  .company-contact-links {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .company-contact-links a {
+    border-radius: 14px;
+    justify-content: flex-start;
+    max-width: 100%;
+    min-height: 42px;
+  }
+
+  .company-contact-links a span {
+    overflow-wrap: anywhere;
   }
 
   .service-item {

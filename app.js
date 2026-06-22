@@ -159,6 +159,30 @@ const companyWebsiteByName = {
   }
 };
 
+const companyContactByName = {
+  [normalizedKey("Buses Vipu Ray")]: {
+    email: "vipuray.oficial@gmail.com"
+  },
+  [normalizedKey("Buses Transantin")]: {
+    phone: "+569 61906054",
+    email: "servicioalcliente@transantin.cl"
+  },
+  [normalizedKey("Buses Pullman Tur")]: {
+    phone: "+569 3391 2361",
+    email: "serviciocliente2@busespullmantur.cl"
+  },
+  [normalizedKey("Buses Liquiñe Oro Verde")]: {
+    phone: "+569 65973035"
+  },
+  [normalizedKey("Buses Lista Azul")]: {
+    phone: "+569 76359544",
+    email: "LISTAAZUL@TLA.CL"
+  },
+  [normalizedKey("Buses Intercomunal Sur")]: {
+    phone: "+569 84759979"
+  }
+};
+
 const infoSlides = [
   {
     label: "Recomendación",
@@ -467,6 +491,7 @@ function renderCompanyCard(company, index) {
   const label = company.logo;
   const displayName = getCompanyDisplayName(company);
   const destinationList = company.destinations.split(",").map((item) => item.trim()).join(", ");
+  const contact = getCompanyContact(company.name);
 
   return `
     <article class="destination-card company-destination-card" style="--card-accent: ${theme.accent}; --card-tint: ${theme.tint}; --logo-plate: ${theme.plate || "rgba(255, 255, 255, 0.14)"}">
@@ -482,6 +507,7 @@ function renderCompanyCard(company, index) {
           <span class="meta-destinations">${locationIcon()}${destinationList}</span>
           <span>${ticketIcon()}Boletería ${company.ticketOffice}</span>
         </div>
+        ${renderCompanyCardContact(contact)}
       </div>
       <button class="company-card-action" type="button" aria-label="Consultar ${company.name}" data-card-company="${company.name}">
         ${arrowIcon()}
@@ -574,6 +600,7 @@ function renderResults(companyName) {
           <strong>${company.destinations}</strong>
           </div>
         </div>
+        ${renderCompanyContactPanel(company)}
       </div>
       <div class="company-services-panel">
         <div class="service-list-header">
@@ -643,6 +670,44 @@ function groupServicesByDestination(companyServices) {
 
 function getCompanyWebsite(companyName) {
   return companyWebsiteByName[normalizedKey(companyName)] || null;
+}
+
+function getCompanyContact(companyName) {
+  return companyContactByName[normalizedKey(companyName)] || null;
+}
+
+function renderCompanyCardContact(contact) {
+  if (!contact) return "";
+
+  return `
+    <div class="company-card-contact">
+      ${contact.phone ? `<a href="${whatsappUrl(contact.phone)}">${phoneIcon()}<span>${escapeHtml(contact.phone)}</span></a>` : ""}
+      ${contact.email ? `<a href="mailto:${escapeHtml(contact.email)}">${emailIcon()}<span>${escapeHtml(contact.email)}</span></a>` : ""}
+    </div>
+  `;
+}
+
+function renderCompanyContactPanel(company) {
+  const contact = getCompanyContact(company.name);
+  if (!contact) return "";
+
+  return `
+    <div class="company-info-item company-contact-info">
+      ${contactIcon()}
+      <div>
+        <small>Contacto de empresa</small>
+        <div class="company-contact-links">
+          ${contact.phone ? `<a href="${whatsappUrl(contact.phone)}" target="_blank" rel="noopener noreferrer">${phoneIcon()}<span>WhatsApp/Fono: ${escapeHtml(contact.phone)}</span></a>` : ""}
+          ${contact.email ? `<a href="mailto:${escapeHtml(contact.email)}">${emailIcon()}<span>Correo: ${escapeHtml(contact.email)}</span></a>` : ""}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function whatsappUrl(phone) {
+  const digits = String(phone).replace(/\D/g, "");
+  return `https://wa.me/${digits}`;
 }
 
 function renderCompanyService(service, company, companyWebsite = null) {
@@ -1076,6 +1141,18 @@ function searchIcon() {
 
 function infoIcon() {
   return `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 16v-4"/><path d="M12 8h.01"/><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>`;
+}
+
+function phoneIcon() {
+  return `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.7.6 2.5a2 2 0 0 1-.4 2.1L8 9.6a16 16 0 0 0 6.4 6.4l1.3-1.3a2 2 0 0 1 2.1-.4c.8.3 1.6.5 2.5.6a2 2 0 0 1 1.7 2Z"/></svg>`;
+}
+
+function emailIcon() {
+  return `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>`;
+}
+
+function contactIcon() {
+  return `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-8 0v2"/><path d="M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/><path d="M18 8h3M19.5 6.5v3"/></svg>`;
 }
 
 function arrowIcon() {
