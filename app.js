@@ -1043,6 +1043,15 @@ function companyEmailUrl(company) {
   return `mailto:vipuray.oficial@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
 function showToast(message) {
   const toast = $("[data-toast]");
   toast.textContent = message;
