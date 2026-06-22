@@ -647,12 +647,10 @@ function renderCompanyService(service, company, companyWebsite = null) {
   const infoMarkup = companyWebsite
     ? `
       <div class="service-time service-website">
-        ${externalLinkIcon()}
         <div>
           <small>Sitio oficial</small>
           <a class="company-website-button" href="${companyWebsite.url}" target="_blank" rel="noopener noreferrer" data-company-website="${escapeHtml(companyName)}">
             ${escapeHtml(companyWebsite.label)}
-            ${arrowIcon()}
           </a>
         </div>
       </div>
@@ -732,14 +730,15 @@ function bindEvents() {
     const companyButton = event.target.closest("[data-card-company]");
     if (companyButton) {
       const form = $("[data-search-form]");
-      const companyName = companyButton.dataset.cardCompany;
-      const selectedCompany = companies.find((company) => company.name === companyName);
+      const requestedCompanyName = companyButton.dataset.cardCompany;
+      const selectedCompany = companies.find((company) => normalizedKey(company.name) === normalizedKey(requestedCompanyName));
+      const companyName = selectedCompany?.name || requestedCompanyName;
       trackAnalyticsEvent("company_card_click", {
         source: "company_card",
         company: companyName,
         destination: selectedCompany?.destinations || ""
       });
-      form.elements.company.value = companyButton.dataset.cardCompany;
+      form.elements.company.value = companyName;
       showCompanySchedule(companyName, "company_card");
       return;
     }
@@ -1074,10 +1073,6 @@ function infoIcon() {
 
 function mailIcon() {
   return `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>`;
-}
-
-function externalLinkIcon() {
-  return `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 4h6v6"/><path d="m10 14 10-10"/><path d="M20 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h5"/></svg>`;
 }
 
 function arrowIcon() {
