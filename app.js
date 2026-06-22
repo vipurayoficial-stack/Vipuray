@@ -152,6 +152,10 @@ const companyWebsiteByName = {
   [normalizedKey("Buses Liquiñe Oro Verde")]: {
     url: "https://www.busesliquine.cl/",
     label: "Ir a Liquiñe"
+  },
+  [normalizedKey("Buses Lista Azul")]: {
+    url: "https://kupos.cl/es/pasajes/bus/lista-azul",
+    label: "Ir a Lista Azul"
   }
 };
 
