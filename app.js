@@ -653,6 +653,7 @@ function renderCompanyService(service, company, companyWebsite = null) {
             ${escapeHtml(companyWebsite.label)}
           </a>
         </div>
+        <p class="company-website-note">Para consultar o ver destinos y valores ingrese a la página oficial de la empresa.</p>
       </div>
     `
     : `

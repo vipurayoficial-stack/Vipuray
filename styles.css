@@ -1332,22 +1332,28 @@ h2 {
 
 .service-website {
   align-items: center;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 48px minmax(190px, auto) minmax(280px, 1fr);
 }
 
 .service-website::before {
-  background: linear-gradient(135deg, #0077d9, #00b89c);
+  align-items: center;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.34), transparent 34%),
+    linear-gradient(135deg, #0077d9, #00b89c);
   border-radius: 999px;
-  box-shadow: 0 10px 22px rgba(0, 119, 217, 0.18);
+  box-shadow: 0 16px 30px rgba(0, 119, 217, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.28);
   color: #ffffff;
   content: "↗";
   display: inline-flex;
-  flex: 0 0 46px;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 950;
-  height: 46px;
+  height: 48px;
   justify-content: center;
   line-height: 1;
-  width: 46px;
+  text-shadow: 0 2px 8px rgba(0, 54, 112, 0.22);
+  width: 48px;
 }
 
 .company-website-button {
@@ -1363,6 +1369,20 @@ h2 {
   min-height: 44px;
   padding: 0 18px;
   text-decoration: none;
+}
+
+.company-website-button:hover {
+  box-shadow: 0 18px 34px rgba(0, 119, 217, 0.24);
+  transform: translateY(-1px);
+}
+
+.company-website-note {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 850;
+  line-height: 1.35;
+  margin: 0;
+  max-width: 560px;
 }
 
 .service-item strong {
@@ -2635,6 +2655,14 @@ tr:last-child td {
 
   .company-website-button {
     width: fit-content;
+  }
+
+  .service-website {
+    grid-template-columns: 48px 1fr;
+  }
+
+  .company-website-note {
+    grid-column: 1 / -1;
   }
 
   .section {
